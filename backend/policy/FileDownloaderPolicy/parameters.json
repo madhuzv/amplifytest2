@@ -1,0 +1,5 @@
+{
+    "functionFileDownloaderLambdaExecutionRole": {
+      "Fn::GetAtt": ["functionFileDownloader", "Outputs.LambdaExecutionRole"]
+    }
+}

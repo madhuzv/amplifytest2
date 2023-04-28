@@ -1,0 +1,65 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "policy file",
+    "Parameters": {
+      "functionIoTQueryLambdaExecutionRole": {
+        "Type": "String"
+      },
+      "functionReqPresignURLLambdaExecutionRole": {
+        "Type": "String"
+      },
+      "functionTaskTargetTriggerLambdaExecutionRole": {
+        "Type": "String"
+      },
+      "functionTimeoutMonitorLambdaExecutionRole": {
+        "Type": "String"
+      },
+      "env": {
+        "Type": "String"
+      }
+    },
+    "Conditions": {
+      "ShouldNotCreateEnvResources": {
+        "Fn::Equals": [
+          {
+            "Ref": "env"
+          },
+          "NONE"
+        ]
+      }
+    },
+    "Resources": {
+      "AmplifyResourcesPolicy": {
+        "Type": "AWS::IAM::Policy",
+        "Properties": {
+          "PolicyName": "amplify-lambda-execution-policy-iot",
+          "Roles": [
+            {
+              "Ref": "functionIoTQueryLambdaExecutionRole"
+            },
+            {
+              "Ref": "functionReqPresignURLLambdaExecutionRole"
+            },
+            {
+              "Ref": "functionTaskTargetTriggerLambdaExecutionRole" 
+            },
+            {
+              "Ref": "functionTimeoutMonitorLambdaExecutionRole" 
+            }
+          ],
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": ["iot:*"],
+                "Resource": "*"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+  
+  

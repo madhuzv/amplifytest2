@@ -1,0 +1,13 @@
+{
+    "AppSyncApiName": "[***]tgql",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": "[***]se",
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authproceptgql5d4b5c6d",
+            "Outputs.UserPoolId"
+        ]
+    },
+    "S3DeploymentBucket": "[***]ify-[***]ept-[***]ql-[***]dev-[***]227-[***]ment",
+    "S3DeploymentRootKey": "[***]ify-[***]ync-[***]es/[***]e5abff5b71dd8d1a"
+}

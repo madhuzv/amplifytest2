@@ -1,0 +1,126 @@
+[
+  {
+    "groupName": "Admin",
+    "precedence": 1
+  },
+  {
+    "groupName": "Engineer",
+    [
+        {
+            "groupName": "Admin",
+            "precedence": 1,
+            "customPolicies": [
+                {
+                    "PolicyName": "admin-group-policy",
+                    "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                        "Sid": "statement1",
+                        "Effect": "Allow",
+                        "Action": ["s3:*"],
+                        "Resource": ["arn:aws:s3:::*"]
+                        }
+                    ]
+                    }
+                }
+            ]
+        },
+        {
+            "groupName": "Engineer",
+            "precedence": 2,
+            "customPolicies": [
+                {
+                    "PolicyName": "admin-group-policy",
+                    "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                        "Sid": "statement1",
+                        "Effect": "Allow",
+                        "Action": ["s3:*"],
+                        "Resource": ["arn:aws:s3:::*"]
+                        }
+                    ]
+                    }
+                }
+            ]
+        },
+        {
+            "groupName": "FieldEngineer",
+            "precedence": 3,
+            "customPolicies": [
+                {
+                    "PolicyName": "admin-group-policy",
+                    "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                        "Sid": "statement1",
+                        "Effect": "Allow",
+                        "Action": ["s3:*"],
+                        "Resource": ["arn:aws:s3:::*"]
+                        }
+                    ]
+                    }
+                }
+            ]
+    
+        },
+        {
+            "groupName": "Manufactory",
+            "precedence": 4,
+            "customPolicies": [
+                {
+                    "PolicyName": "admin-group-policy",
+                    "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                        "Sid": "statement1",
+                        "Effect": "Allow",
+                        "Action": ["s3:*"],
+                        "Resource": ["arn:aws:s3:::*"]
+                        }
+                    ]
+                    }
+                }
+            ]
+    
+        },
+        {
+            "groupName": "Analysis",
+            "precedence": 5,
+            "customPolicies": [
+                {
+                    "PolicyName": "admin-group-policy",
+                    "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                        "Sid": "statement1",
+                        "Effect": "Allow",
+                        "Action": ["s3:*"],
+                        "Resource": ["arn:aws:s3:::*"]
+                        }
+                    ]
+                    }
+                }
+            ]
+    
+        }
+    ]    "precedence": 2
+  },
+  {
+    "groupName": "FieldEngineer",
+    "precedence": 3
+  },
+  {
+    "groupName": "Manufactory",
+    "precedence": 4
+  },
+  {
+    "groupName": "Analysis",
+    "precedence": 5
+  }
+]

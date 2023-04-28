@@ -1,0 +1,151 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Parameters": {
+        "env": {
+            "Type": "String"
+        }
+    },
+    "Resources": {
+        "FileInfoQueue": {
+            "Type": "AWS::SQS::Queue",
+            "Properties": {
+                "QueueName": {
+                    "Fn::Join": [
+                        "",
+                        [
+                            "CrossRegionFileInfoQueue",
+                            "-",
+                            {
+                                "Ref": "env"
+                            },
+                            ".fifo"
+                        ]
+                    ]
+                },
+                "FifoQueue": true,
+                "ContentBasedDeduplication": true,
+                "MessageRetentionPeriod": 3600,  
+                "ReceiveMessageWaitTimeSeconds": 5
+            }
+        },
+        "SQSPolicy": {
+            "Type": "AWS::SQS::QueuePolicy",
+            "Properties": {
+                "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Id": "FileInfoSQSPolicy",
+                    "Statement":[
+                        {
+                            "Sid": "owner_statement",
+                            "Action":[
+                                "SQS:SendMessage",
+                                "SQS:ReceiveMessage",
+                                "SQS:DeleteMessage"
+                            ],
+                            "Effect":"Allow",
+                            "Resource": {
+                                "Fn::GetAtt": [
+                                "FileInfoQueue",
+                                "Arn"
+                                ]
+                            },
+                            "Principal": "*"
+                        },
+                        {
+                            "Sid": "RestrictSendReceive",
+                            "Effect": "Deny",
+                            "Principal": "*",
+                            "Action": [
+                                "sqs:SendMessage",
+                                "sqs:ReceiveMessage",
+                                "sqs:DeleteMessage"
+                            ],
+                            "Resource": {
+                                "Fn::GetAtt": [
+                                    "FileInfoQueue",
+                                    "Arn"
+                                ]
+                            },
+                            "Condition": {
+                                "ForAllValues:ArnNotLike": {
+                                    "aws:PrincipalArn": [
+                                        {
+                                            "Fn::Sub": [
+                                                "arn:aws:iam::${account}:role/proceptgqlLambdaRolee76f5367-${env}",
+                                                {
+                                                    "region": {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "account": {
+                                                        "Ref": "AWS::AccountId"
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "Fn::Sub": [
+                                                "arn:aws:iam::${account}:role/*-IotFileApp*-DevEnvAppReqPresignedURL-*",
+                                                {
+                                                    "region": {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "account": {
+                                                        "Ref": "AWS::AccountId"
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "Fn::Sub": [
+                                                "arn:aws:iam::${account}:role/*-IotFileApp*-DevEnvApprobotEventsHand-*",
+                                                {
+                                                    "region": {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "account": {
+                                                        "Ref": "AWS::AccountId"
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "Fn::Sub": [
+                                                "arn:aws:iam::${account}:role/*-IotFileApp*-DevEnvApptaskEventsHandl-*",
+                                                {
+                                                    "region": {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "account": {
+                                                        "Ref": "AWS::AccountId"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }                
+                    ]
+                },
+                "Queues": [
+                    {"Ref": "FileInfoQueue"}
+                ]
+            },
+            "DependsOn": "FileInfoQueue"
+        }
+    },
+    "Outputs" : {
+        "URL" : {
+          "Description" : "URL of FileInfoQueue",
+          "Value" : { "Ref" : "FileInfoQueue" }
+        },
+        "Arn" : {
+          "Description" : "ARN of FileInfoQueue",
+          "Value" : { "Fn::GetAtt" : ["FileInfoQueue", "Arn"]}
+        },
+        "Name" : {
+          "Description" : "Name of FileInfoQueue",
+          "Value" : { "Fn::GetAtt" : ["FileInfoQueue", "QueueName"]}
+        }
+    }
+}

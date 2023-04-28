@@ -1,0 +1,6 @@
+{
+    "functionFileProcessorApiTriggerLambdaExecutionRole": {
+      "Fn::GetAtt": ["functionFileProcessorApiTrigger", "Outputs.LambdaExecutionRole"]
+    }
+}
+  

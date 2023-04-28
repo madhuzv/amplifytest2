@@ -1,0 +1,226 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Parameters": {
+        "env": {
+            "Type": "String"
+        }
+    },
+    "Resources": {
+        "SessionDataTopicPolicy": {
+            "Type": "AWS::SNS::TopicPolicy",
+            "Properties": {
+                "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Sid": "grant-publish",
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                            },
+                            "Action": [
+                                "sns:Publish",
+                                "sns:Subscribe"
+                            ],
+                            "Resource": "*"
+                        }
+                    ]
+                },
+                "Topics": [
+                    {
+                        "Ref": "SessionDataTopic"
+                    },
+                    {
+                        "Ref": "AppLogTopic"
+                    },
+                    {
+                        "Ref": "PortalUploadDataTopic"
+                    },
+                    {
+                        "Ref": "RegionalFilePathTopic"
+                    },
+                    {
+                        "Ref": "AIPredictionTopic"
+                    }
+                ]
+            }
+        },
+        "SessionDataTopic": {
+            "Type": "AWS::SNS::Topic",
+            "Properties": {
+                "TopicName": {
+                    "Fn::Join": [
+                        "-",
+                        [
+                            "SessionData",
+                            { 
+                                "Ref": "env"
+                            }
+                        ]
+                    ]
+                }
+            }
+        },
+        "AppLogTopic": {
+            "Type": "AWS::SNS::Topic",
+            "Properties": {
+                "TopicName": {
+                    "Fn::Join": [
+                        "-",
+                        [
+                            "AppLog",
+                            { 
+                                "Ref": "env"
+                            }
+                        ]
+                    ]
+                }
+            }
+        },
+        "PortalUploadDataTopic": {
+            "Type": "AWS::SNS::Topic",
+            "Properties": {
+                "TopicName": {
+                    "Fn::Join": [
+                        "-",
+                        [
+                            "PortalUploadData",
+                            { 
+                                "Ref": "env"
+                            }
+                        ]
+                    ]
+                }
+            }
+        },
+        "RegionalFilePathTopic": {
+            "Type": "AWS::SNS::Topic",
+            "Properties": {
+                "TopicName": {
+                    "Fn::Join": [
+                        "-",
+                        [
+                            "RegionalFilePathTopic",
+                            { 
+                                "Ref": "env"
+                            }
+                        ]
+                    ]
+                }
+            }
+        },
+        "AIPredictionTopic": {
+            "Type": "AWS::SNS::Topic",
+            "Properties": {
+                "TopicName": {
+                    "Fn::Join": [
+                        "-",
+                        [
+                            "AIPrediction",
+                            { 
+                                "Ref": "env"
+                            }
+                        ]
+                    ]
+                }
+            }
+        }
+    },
+    "Outputs": {
+        "SessionDataTopic": {
+            "Description": "Robot session data topic",
+            "Value": {
+                "Ref": "SessionDataTopic"
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Join": [
+                        ":",
+                        [
+                            {
+                                "Ref": "AWS::StackName"
+                            },
+                            "SessionDataTopic"
+                        ]
+                    ]
+                }
+            }
+        },
+        "AppLogTopic": {
+            "Description": "Application log data topic",
+            "Value": {
+                "Ref": "AppLogTopic"
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Join": [
+                        ":",
+                        [
+                            {
+                                "Ref": "AWS::StackName"
+                            },
+                            "AppLogTopic"
+                        ]
+                    ]
+                }
+            }
+        },
+        "PortalUploadDataTopic": {
+            "Description": "Portal upload data topic",
+            "Value": {
+                "Ref": "PortalUploadDataTopic"
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Join": [
+                        ":",
+                        [
+                            {
+                                "Ref": "AWS::StackName"
+                            },
+                            "PortalUploadDataTopic"
+                        ]
+                    ]
+                }
+            }
+        },
+        "RegionalFilePathTopic": {
+            "Description": "Portal upload data topic",
+            "Value": {
+                "Ref": "RegionalFilePathTopic"
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Join": [
+                        ":",
+                        [
+                            {
+                                "Ref": "AWS::StackName"
+                            },
+                            "RegionalFilePathTopic"
+                        ]
+                    ]
+                }
+            }
+        },
+        "AIPredictionTopic": {
+            "Description": "AI Image prediction topic",
+            "Value": {
+                "Ref": "AIPredictionTopic"
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Join": [
+                        ":",
+                        [
+                            {
+                                "Ref": "AWS::StackName"
+                            },
+                            "AIPredictionTopic"
+                        ]
+                    ]
+                }
+            }
+        }
+    }
+}

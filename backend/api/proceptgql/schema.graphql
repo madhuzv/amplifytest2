@@ -1,0 +1,628 @@
+scalar Long       # AWS undocumented type
+
+type AuthorizedUser
+  @model (subscriptions: { level: public })
+  @auth(rules: [
+      {allow: groups, groups: ["Admin"]}
+    ])
+  @key(name: "byEmail", fields:["email"], queryField: "getUserByEmail")
+{
+  id: ID!
+  name: String!
+  email: String!
+  groups: [String]!
+  title: String
+  description: String
+  status: String
+  createdAt: String
+}
+
+type Robot
+  @model (subscriptions: { level: public })
+  @searchable
+  @auth(rules: [
+    {allow: groups, groups:["Admin", "Engineer", "FieldEngineer", "Manufactory"]}
+    {allow: private, provider: iam}
+  ])
+  @key(name: "byName", fields: ["thingName"], queryField: "getRobotByName")
+{
+  id: ID!
+  thingName: String!
+  thing: Thing
+    @connection(fields: ["thingName"])
+  sessions: [Session]
+    @connection(keyName: "byRobot", fields: ["id"])
+    @auth(rules: [{allow: groups, groups: ["Admin", "Engineer", "FieldEngineer"]}])
+  appLogYearMonth: [AppLogYearMonth]
+    @connection(keyName: "logByRobot", fields: ["id"])
+    @auth(rules: [{allow: groups, groups: ["Admin", "Engineer", "FieldEngineer"]}])
+  accountID: String
+  location: String
+  lotNumber: String
+  region: String
+  regionName: String
+  status: String
+  productVer: String
+  online: Boolean
+  totalProcedureStarted: Int
+  totalProcedureSucceeded: Int
+  totalProcedureIncomplete: Int
+  totalProcedureErrored: Int
+  totalHandpieceUsed: Int
+  incompletePerc: Float
+  erroredPerc: Float
+  lastProcedureDate: AWSDateTime
+  lastErrorDate: AWSDateTime
+  lastCPUStarted: AWSDateTime
+  lastProcedureStatus: String
+  os: String
+  application: String
+  consoleSoftware: String
+  consoleFirmware: String
+  motorpackFirmware: String
+  consoleCbPCB: String
+  consolePbPCB: String
+  motorpackPCB: String
+  wifi: String
+  ultrasoundModel: String
+  ultrasoundVersion: String
+  maxCPUUsage: Float
+  maxMemoryUsage: Long
+  availableDiskSpace: Long
+  taskTargets: [TaskTarget] @connection(keyName: "byRobotID", fields: ["id"])
+}
+
+type Session
+  @model (subscriptions: { level: public })
+  @searchable
+  @auth(rules: [
+    {allow: groups, groups: ["Admin", "Engineer", "FieldEngineer"]}
+    {allow: private, provider: iam}
+  ])
+  @key(name: "byRobot", fields: ["robotID", "id"], queryField: "getSessionByRobot")
+  @key(name: "bySessionName", fields: ["sessionName", "robotID"], queryField: "getSessionByName")
+{
+  id: ID!   # UUID
+  sessionName: String # CPU provided Session ID
+  robotID: ID!
+  robot: Robot @connection(fields: ["robotID"])
+  patientID: String
+  year: String
+  month: String
+  files: [SessionFile] @connection(keyName: "bySession", fields: ["id"])
+  status: String
+  startTime: AWSDateTime
+  endTime: AWSDateTime
+  duration: Int
+  handpieceCount: Int
+  handpiece: [Handpiece]
+      @connection(keyName: "bySession", fields: ["id"])
+  errors: Int
+  errorCodes: [String]
+  trusIn: AWSDateTime
+  planningStartTime: AWSDateTime
+  resectionStartTime: AWSDateTime
+  resectionEndTime: AWSDateTime
+  catheterIn: AWSDateTime
+  procedurePass: Int
+  prostateSizeCC: Int
+  medianLobeEnabled: Boolean
+  treatmentWarnings: String
+  reportFailures: String
+  prostateVolumeInCm: Float
+  estimatedResectionVolumeInML: Float
+  anesthesiaType: String
+  profileDistalPointEncoderValue: Float
+  medianLobeEncoderCount: Float
+  bladderNeckEncoderCount: Float
+  medialEncoderCount: Float
+  butterflyEncoderValue: Float
+  veruEncoderCount: Float
+  profileProximalPointEncoderValue: Float
+  treatmentStartLandmarkPos: [Float]
+  bladderNeckLandmarkPos: [Float]
+  midProstateLandmarkPos: [Float]
+  treatmentEndLandmarkPos: [Float]
+  profileHandle: String
+  isMedianLobeAnglePlanned: Boolean
+  isBladderNeckAnglePlanned: Boolean
+  isMidProstateAnglePlanned: Boolean
+  isVeruProtectionAnglePlanned: Boolean
+  medianLobeAngleLeft: Float
+  bladderNeckAngleLeft: Float
+  midProstateAngleLeft: Float
+  veruProtectionAngleLeft: Float
+  medianLobeAngleRight: Float
+  bladderNeckAngleRight: Float
+  midProstateAngleRight: Float
+  veruProtectionAngleRight: Float
+  medianLobeAngleDepthInMm: Float
+  bladderNeckAngleDepthInMm: Float
+  midProstateAngleDepthInMm: Float
+  bladderNeckBufferZoneWidthInMm: Float
+  treatmentStartTime: AWSDateTime
+  totalCutDistanceInMm: Float
+}
+
+type SessionFile
+  @model (subscriptions: { level: public })
+  @auth(rules: [
+    {allow: groups, groups: ["Admin", "Engineer", "FieldEngineer"]}
+    {allow: private, provider: iam}
+  ])
+  @key(name: "bySession", fields: ["sessionID", "key"])
+  @key(name: "byName", fields: ["sessionID", "name"], queryField: "listFilesBySession")
+  @key(name: "byKey", fields:["key"], queryField: "getFileByKey")
+{
+  id: ID!
+  sessionID: ID!
+  name: String!
+  bucket: String!
+  key: String!
+  type: String
+  session: Session @connection(fields: ["sessionID"])
+  fileStatus: String
+}
+
+type AppLogYearMonth
+  @model (subscriptions: { level: public })
+  @auth(rules: [
+    {allow: groups, groups: ["Admin", "Engineer", "FieldEngineer"]}
+    {allow: private, provider: iam}
+  ])
+  @key(name: "logByRobot", fields: ["robotID", "id"])
+  @key(name: "byDate", fields: ["robotID", "year", "month"], queryField: "listAppLogYearMonthsByRobot")
+{
+  id: ID!
+  robotID: ID!
+  robot: Robot @connection(fields: ["robotID"])
+  year: String
+  month: String
+  files: [AppLogFile] @connection(keyName: "byYearMonth", fields: ["id"])
+}
+
+type AppLogFile
+  @model (subscriptions: { level: public })
+  @searchable
+  @auth(rules: [
+    {allow: groups, groups: ["Admin", "Engineer", "FieldEngineer"]}
+    {allow: private, provider: iam}
+  ])
+  @key(name: "byYearMonth", fields: ["yearMonthID", "key"])
+  @key(name: "byName", fields: ["yearMonthID", "name"], queryField: "listAppLogFilesByYearMonth")
+  @key(name: "byKey", fields:["key"], queryField: "getAppLogFileByKey")
+{
+  id: ID!
+  robotID: ID
+  yearMonthID: ID!
+  name: String!
+  bucket: String!
+  key: String!
+  type: String
+  yearMonth: AppLogYearMonth @connection(fields: ["yearMonthID"])
+  fileStatus: String
+  relevantDate: AWSDateTime # datetime with zeroed out HH:MM:SS.NNN values
+}
+
+type AppLog
+  @model (subscriptions: { level: public })
+  @searchable
+  @auth(rules: [
+    {allow: groups, groups: ["Admin", "Engineer", "FieldEngineer"]}
+    {allow: private, provider: iam}
+  ])
+  @key(name: "byRelevantDate", fields: ["relevantDate"], queryField: "listAppLogByRelevantDate")
+{
+  id: ID!
+  robotID: ID! # id of Robot table#
+  relevantDate: AWSDateTime!  # datetime with zeroed out HH:MM:SS.NNN values
+  errors: Int
+  errorCodes: [String]  # the list contains the unique error codes occurred when NOT in a session.
+  sessionCount: Int     # number of sessions/procedures
+  handpieceCount: Int   # number of handpiece usage
+}
+
+
+type FileProcessorTask
+  @model (subscriptions: { level: public })
+  @auth(rules: [
+    {allow: groups, groups: ["Admin", "Engineer", "FieldEngineer", "Analysis", "Manufactory"]}
+    {allow: private, provider: iam}
+  ])
+  @key( fields: ["name"])
+{
+  name: String!
+  branch: String
+  taskDefinition: String
+  topics: [String]
+  queue: String
+  filterPolicy: String
+  taskStatus: String
+  restartCount: Int
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+}
+
+type Query
+{
+  getThings: [ThingInfo] @function(name: "IoTQuery-${env}")
+  getZipFile( path: String!, bucket: String, zipName: String ): String @function(name: "FileDownloader-${env}")
+  getAIPrediction( imageId: String!, anatomy: String, bucket: String ): String @function(name: "AIPrediction-${env}")
+}
+
+type Mutation
+{
+  createCertificate(certName: String!, regionName: String): Certificate @function(name: "IoTQuery-${env}")
+  createAThing(thingName: String!, deviceId: ID, productVer: String, regionName: String, description: String, accoundId: String, lotNumber: String, location: String): ThingInfo @function(name: "IoTQuery-${env}")
+  removeAThing(thingName: String!, regionName: String): String @function(name: "IoTQuery-${env}")
+  inspectImagesInCart(anatomy: String, status: String, bucket:String ): String @function(name: "AIPrediction-${env}")
+  reCreateAnnotations(imageIds: [String], anatomy: String, aiModelId: String, operation: String, bucket:String): String @function(name: "AIPrediction-${env}")
+}
+
+type ThingInfo 
+{
+  thingName: String
+  thingArn: String
+  thingId: String
+  env: String
+  robotID: ID
+  certificate: Certificate
+  configPath: String
+}
+
+type Certificate
+{
+  certificateId: ID!
+  certificateName: String!
+  certificateARN: String!
+  bucket: String!
+  certPath: String!
+  privKeyPath: String!
+  pubKeyPath: String!
+}
+
+type Thing
+  @model (subscriptions: { level: public })
+  @auth(rules: [
+    {allow: groups, groups: ["Admin", "Engineer", "FieldEngineer", "Analysis", "Manufactory"]}
+    {allow: private, provider: iam}
+  ])
+  @key( fields: ["thingName"])
+{
+  thingName: String!
+  thingArn: String
+  thingId: String
+  region: String
+  regionName: String
+  productVer: String
+  env: String
+  deviceID: ID
+  certificate: Certificate
+  ownerID: ID
+  ownerEmail: String
+  description: String
+  configPath: String
+}
+
+type Report
+  @model (subscriptions: { level: public })
+  @searchable
+  @auth(rules: [
+    {allow: groups, groups: ["Admin", "Engineer", "FieldEngineer", "Analysis", "Manufactory"]}
+    {allow: private, provider: iam}
+  ])
+  @key(name: "bySession", fields: ["sessionID"], queryField: "listReportsBySession")
+{
+  id: ID!
+  fileProcessorName: String!
+  robotID: ID!
+  sessionID: ID
+  bucket: String!
+  fileKey: String!
+  fileType: String
+  relevantDate: AWSDateTime
+}
+
+type CPUError
+  @model (subscriptions: { level: public })
+  @auth(rules: [
+    {allow: groups, groups: ["Admin", "Engineer", "FieldEngineer", "Analysis", "Manufactory"]}
+    {allow: private, provider: iam}
+  ])
+  @key(name: "byRobotAndErrorCodeAndTime", fields: ["robotID", "errorCode", "errorTime"], queryField: "listCPUErrorByRobotAndErrorCodeAndTime")
+{
+  id: ID!
+  robotID: ID!
+	sessionID: ID
+	errorTime: AWSDateTime
+  clearTime: AWSDateTime
+	errorCode: String    
+  filename: String
+  lineNum: Int
+  details: String
+}
+
+type Handpiece
+  @model (subscriptions: { level: public })
+  @auth(rules: [
+    {allow: groups, groups: ["Admin", "Engineer", "FieldEngineer", "Analysis", "Manufactory"]}
+    {allow: private, provider: iam}
+  ])
+  @key(name: "byRobotSession", fields: ["robotID", "sessionID"], queryField: "listHandpieceByRobotAndSession")
+  @key(name: "bySession", fields: ["sessionID"], queryField: "listHandpieceBySession")
+  @searchable
+{
+  id: ID!
+  robotID: ID
+  sessionID: ID
+  session: Session @connection(fields: ["sessionID"])
+  dockingTime: AWSDateTime
+  handpieceStatus: String
+  handpiecePCB: String
+  handpieceSn: String
+  handpieceLot: String
+  handpieceMfgDate: String
+  handpieceChipSn: String
+}
+
+type RobotChangeEvent
+  @model (subscriptions: { level: public })
+  @auth(rules: [
+    {allow: groups, groups: ["Admin", "Engineer", "FieldEngineer", "Analysis", "Manufactory"]}
+    {allow: private, provider: iam}
+  ])
+{
+  id: ID!
+  robotID: ID
+  changeDate: AWSDateTime
+  changeType: String
+  from: String
+  to: String
+}
+
+type PCB
+  @model (subscriptions: { level: public })
+  @auth(rules: [
+    {allow: groups, groups: ["Admin", "Engineer", "FieldEngineer", "Analysis", "Manufactory"]}
+    {allow: private, provider: iam}
+  ])
+{
+  id: ID!
+  robotID: ID
+  pcbPart: String
+  pcbVersion: String
+  pcbSerialNum: String
+  pcbInstallationDate: AWSDateTime
+  procedureUsed: Int
+  timeUsedInSec: Int
+}
+
+type UploadedFileMetaData
+  @model (subscriptions: { level: public })
+  @auth(rules: [
+    {allow: groups, groups: ["Admin", "Engineer", "FieldEngineer", "Analysis", "Manufactory"]}
+    {allow: private, provider: iam}
+  ])
+  @key(fields: ["key"])
+{
+  key: String!            # S3 key
+  bucket: String
+  metaData: String
+}
+
+type RobotInfo
+  @model
+  @auth(rules: [
+    {allow: groups, groups: ["Admin", "RobotMgr"]}
+    {allow: groups, groups: ["R&D", "MFG"], operations:[read]}
+    {allow: groups, groups: ["Field"], operations:[read, update]}
+    {allow: groups, groupsField: "hospital"}
+  ])
+{
+  id: ID!
+  detail: String
+  hospital: [String]
+}
+
+enum ProductVersion {
+  P1G2
+  P1G3
+  P2
+}
+
+enum ProcedureStatus {
+  Completed
+  OnGoing
+  Incomplete
+}
+
+type Task
+  @model (subscriptions: { level: public })
+  @searchable
+  @auth(rules: [
+    {allow: groups, groups:["Admin", "Engineer", "FieldEngineer"]}
+    {allow: private, provider: iam}
+  ])
+  @key(name: "byName", fields: ["name"], queryField: "getTaskByName")
+{
+  id: ID!
+  name: String!
+  targets: [TaskTarget]
+    @connection(keyName: "byTaskID", fields: ["id"])
+  data: String                  # job data, shared to all targets for the initial job
+  bucket: String
+  packageKey: String            # S3 key of package, set null if no package, shared to all targets for the initial job
+  createdBy: String             # owner email
+  createdAt: AWSDateTime
+  description: String
+  timeout: Float                # in hours
+  cleanupDelay: Float           # in hours
+  status: String                # overallStatus
+  totalTargets: Int
+  completedCount: Int
+  failedCount: Int
+  cancelledCount: Int
+  timeoutCount: Int
+  pendingCount: Int
+  completedPerc: Float  # completed%
+}
+
+type TaskTarget
+  @model (subscriptions: { level: public })
+  @searchable
+  @auth(rules: [
+    {allow: groups, groups: ["Admin", "Engineer", "FieldEngineer"]}
+    {allow: private, provider: iam}
+  ])
+  @key(name: "byTaskID", fields: ["taskID", "robotID"], queryField: "listTaskTargetsByTaskID")
+  @key(name: "byRobotID", fields: ["robotID", "taskID"], queryField: "listTaskTargetsByRobotID")
+  @key(name: "byStatus", fields: ["status"], queryField: "listTaskTargetsByStatus")
+{
+  id: ID!   # UUID
+  robotID: ID!
+  taskID: ID!
+  thingName: String
+  regionName: String
+  robot: Robot @connection(fields: ["robotID"])
+  task: Task @connection(fields: ["taskID"])
+  states: [TaskState]
+    @connection(keyName: "byTaskTargetID", fields: ["id"])
+  responseBucket: String
+  lastState: String
+  lastStateUpdatedBy: String    # last user modify the state
+  lastJobID: ID
+  timeout: Float                # in hours
+  timeoutAt: AWSDateTime
+  status: String                # current status: 'Completed", "Terminated" or "InProgress"
+  data: String
+  bucket: String
+  packageKey: String            # S3 key of package, set null if no package
+}
+
+type TaskState
+  @model (subscriptions: { level: public })
+  @searchable
+  @auth( rules: [
+    { allow: groups, groups: ["Admin", "Engineer", "FieldEngineer"] }
+    { allow: private, provider: iam }
+  ])
+  @key(name: "byTaskTargetID", fields: ["taskTargetID"], queryField: "listTaskStateByTaskTargetID")
+{
+  id: ID!
+  taskTargetID: ID!
+  taskTarget: TaskTarget @connection(fields: ["taskTargetID"])
+  jobID: ID,
+  state: String
+  description: String
+  data: String
+  packageKey: String
+  createdBy: String           # user email address
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime 
+} 
+
+type LabelImage
+  @model (subscriptions: { level: public })
+  @searchable
+  @auth( rules: [
+    { allow: groups, groups: ["Admin", "Engineer", "FieldEngineer"] }
+    { allow: private, provider: iam }
+  ])
+  @key(name: "byDatasetID", fields: ["datasetID"], queryField: "listImagesByDatasetID")
+  @key(name: "byKey", fields:["key"], queryField: "queryLabelImageByKey")
+  @key(name: "byNameByAnatomy", fields:["name", "anatomy"], queryField: "queryLabelImageByNameByAnatomy")
+  @key(name: "byAnatomyByStatus", fields: ["anatomy", "status"], queryField: "queryLabelImageByAnatomyByStatus")
+{
+  id: ID!
+  name: String
+  key: String 
+  bucket: String
+  size: Int
+  sequencer: String
+  datasetID: ID
+  anatomy: String
+  status: String                                            # filtered out imagestatus ["PENDING", "PRE_FILTERED", "DISELECTED","IN_CART", "DISABLED", "DATASET", "QUESTION"]
+  aiAnnotation: [AIAnnotation]
+    @connection(keyName: "byImageId", fields: ["id"])
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime 
+}
+
+type LabelDataset
+  @model (subscriptions: { level: public })
+  @auth( rules: [
+    { allow: groups, groups: ["Admin", "Engineer", "FieldEngineer"] }
+    { allow: private, provider: iam }
+  ])
+@key(name: "byAnatomy", fields:["anatomy"], queryField: "queryLabelDatasetByAnatomy")
+@key(name: "byName", fields:["name"], queryField: "queryLabelDatasetByName")
+{
+  id: ID!
+  name: String!
+  labelboxId: ID              # labelbox dataset id
+  labelImages: [LabelImage] 
+    @connection(keyName: "byDatasetID", fields: ["id"])
+  anatomy: String
+  lbProject: String                                           # Labelbox project name
+}
+
+type AIModel
+  @model (subscriptions: { level: public })
+  @auth( rules: [
+    { allow: groups, groups: ["Admin", "Engineer", "FieldEngineer"] }
+    { allow: private, provider: iam }
+  ])
+@key(name: "byKey", fields:["key"], queryField: "queryAIModelByKey")
+@key(name: "byAnatomy", fields:["anatomy", "updatedAt"], queryField: "queryAIModelByAnatomy")
+{
+  id: ID!
+  name: String
+  bucket: String
+  key: String
+  anatomy: String
+  version: String
+  description: String
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime 
+}
+
+type AIAnnotation
+  @model (subscriptions: { level: public })
+  @auth( rules: [
+    { allow: groups, groups: ["Admin", "Engineer", "FieldEngineer"] }
+    { allow: private, provider: iam }
+  ])
+@key(name: "byImageId", fields: ["imageId"], queryField: "queryAIAnnotationByImageId")
+@key(name: "byImageIdByModelVersion", fields: ["imageId", "modelVersion"], queryField: "queryAIAnnotationByImageIdByModelVersion")
+{
+  id: ID!
+  imageId: ID!
+  labelImage: LabelImage @connection(fields: ["imageId"])
+  aiModelId: ID!
+  modelVersion: String
+  anatomy: String
+  targetSizeX: Int
+  targetSizeY: Int
+  annotation: String    # json string for annotation object
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+  score: Int            # confidence score, 0 - 100 as the percentage
+}
+
+type LabelDataRow
+  @model (subscriptions: { level: public })
+  @auth( rules: [
+    { allow: groups, groups: ["Admin", "Engineer", "FieldEngineer"] }
+    { allow: private, provider: iam }
+  ])
+@key(name: "byDatasetIdByImageId", fields:["datasetId","imageId"], queryField: "queryDataRowByDatasetIdByImageId")
+{
+  id: ID!
+  imageId: ID!
+  datasetId: ID!
+  annotationId: ID
+  labelboxId: String               # labelbox data row id
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+}
+

@@ -1,0 +1,8 @@
+{
+    "snsfileDispatcherSessionDataTopic": {
+      "Fn::GetAtt": [
+        "snsfileDispatcher",
+        "Outputs.SessionDataTopic"
+      ]
+    }
+  }

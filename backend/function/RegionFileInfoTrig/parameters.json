@@ -1,0 +1,20 @@
+{
+    "sqsRegionalFileInfoSQSName": {
+        "Fn::GetAtt": [
+          "sqsRegionalFileInfoSQS",
+          "Outputs.Name"
+        ]
+    },
+    "sqsRegionalFileInfoSQSArn": {
+        "Fn::GetAtt": [
+          "sqsRegionalFileInfoSQS",
+          "Outputs.Arn"
+        ]
+    },
+    "snsfileDispatcherSessionDataTopic": {
+      "Fn::GetAtt": [
+        "snsfileDispatcher",
+        "Outputs.SessionDataTopic"
+      ]
+    }
+}

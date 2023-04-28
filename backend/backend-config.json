@@ -1,0 +1,1088 @@
+{
+  "api": {
+    "AdminQueries": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "proceptgql5d4b5c6d"
+        },
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "AdminQueriesc5e8fdc4"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
+    "proceptgql": {
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AWS_IAM"
+            }
+          ],
+          "defaultAuthentication": {
+            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+            "userPoolConfig": {
+              "userPoolId": "authproceptgql5d4b5c6d"
+            }
+          }
+        }
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync"
+    }
+  },
+  "auth": {
+    "proceptgql5d4b5c6d": {
+      "customAuth": false,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "proceptgql5d4b5c6dPostConfirmation",
+          "triggerProvider": "Cognito"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito"
+    },
+    "userPoolGroups": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId",
+            "AppClientIDWeb",
+            "AppClientID",
+            "IdentityPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "proceptgql5d4b5c6d"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito-UserPool-Groups"
+    }
+  },
+  "ecs": {
+    "fileProcessor": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "BucketName"
+          ],
+          "category": "storage",
+          "resourceName": "ProceptRobotData"
+        },
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "proceptgql"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "ECS"
+    }
+  },
+  "function": {
+    "AIPrediction": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "AIProcessReceiver"
+        },
+        {
+          "attributes": [
+            "BucketName"
+          ],
+          "category": "storage",
+          "resourceName": "ProceptRobotData"
+        },
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "proceptgql"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "AIProcessReceiver": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "GqlApiInvoke"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "AdminQueriesc5e8fdc4": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "proceptgql5d4b5c6d"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "AuthUserMutationTrigger": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput"
+          ],
+          "category": "api",
+          "resourceName": "proceptgql"
+        },
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "proceptgql5d4b5c6d"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "AuthUserBackDB"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "DBTableBackFill": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "proceptgql"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "FifoSQSConnection": {
+      "build": true,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "FileDownloader": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "BucketName"
+          ],
+          "category": "storage",
+          "resourceName": "ProceptRobotData"
+        },
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "proceptgql"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "FileProcessorApiTrigger": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "FifoSQSConnection"
+        },
+        {
+          "attributes": [
+            "BucketName"
+          ],
+          "category": "storage",
+          "resourceName": "ProceptRobotData"
+        },
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "proceptgql"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "GenBucketKey": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "StoreBucketKey"
+        },
+        {
+          "attributes": [
+            "BucketName"
+          ],
+          "category": "storage",
+          "resourceName": "ProceptRobotData"
+        },
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "proceptgql"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "GqlApiInvoke": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput"
+          ],
+          "category": "api",
+          "resourceName": "proceptgql"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "IoTQuery": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "proceptgqllayer4Portal"
+        },
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "proceptgql5d4b5c6d"
+        },
+        {
+          "attributes": [
+            "BucketName"
+          ],
+          "category": "storage",
+          "resourceName": "ProceptRobotData"
+        },
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "proceptgql"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "IoTRobotEventTrigger": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "proceptgql"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "IoTShadowLogger": {
+      "build": true,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "LabelDatasetTrigger": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "BucketName"
+          ],
+          "category": "storage",
+          "resourceName": "ProceptRobotData"
+        },
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "proceptgql"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "RegionFileInfoTrig": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "StoreBucketKey"
+        },
+        {
+          "attributes": [
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "IoTRobotEventTrigger"
+        },
+        {
+          "attributes": [
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "TaskEventManager"
+        },
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "proceptgql"
+        },
+        {
+          "attributes": [
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "proceptgqllayer4Portal"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "ReqPresignURL": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "proceptgqllayer4Portal"
+        },
+        {
+          "attributes": [
+            "BucketName"
+          ],
+          "category": "storage",
+          "resourceName": "ProceptRobotData"
+        },
+        {
+          "attributes": [
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "GenBucketKey"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "S3RobotDataTrigger": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "AIProcessReceiver"
+        },
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "proceptgql"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "StoreBucketKey": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "GqlApiInvoke"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "TaskEventManager": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "proceptgql"
+        },
+        {
+          "attributes": [
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "proceptgqllayer4Portal"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "TaskTargetTrigger": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "TaskEventManager"
+        },
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "proceptgql"
+        },
+        {
+          "attributes": [
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "proceptgqllayer4Portal"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "TimeoutMonitor": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "TaskEventManager"
+        },
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "proceptgql"
+        },
+        {
+          "attributes": [
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "proceptgqllayer4Portal"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "proceptgql5d4b5c6dPostConfirmation": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "AuthUserBackDB"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "proceptgql6e877c86DefineAuthChallenge": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "proceptgqllayer4Portal": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "LambdaLayer"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_api_proceptgql_ElasticSearchInstanceCount": {
+      "usedBy": [
+        {
+          "category": "api",
+          "resourceName": "proceptgql"
+        }
+      ]
+    },
+    "AMPLIFY_api_proceptgql_ElasticSearchInstanceType": {
+      "usedBy": [
+        {
+          "category": "api",
+          "resourceName": "proceptgql"
+        }
+      ]
+    },
+    "AMPLIFY_function_AIPrediction_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AIPrediction"
+        }
+      ]
+    },
+    "AMPLIFY_function_AIPrediction_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AIPrediction"
+        }
+      ]
+    },
+    "AMPLIFY_function_AIProcessReceiver_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AIProcessReceiver"
+        }
+      ]
+    },
+    "AMPLIFY_function_AIProcessReceiver_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AIProcessReceiver"
+        }
+      ]
+    },
+    "AMPLIFY_function_AdminQueriesc5e8fdc4_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AdminQueriesc5e8fdc4"
+        }
+      ]
+    },
+    "AMPLIFY_function_AdminQueriesc5e8fdc4_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AdminQueriesc5e8fdc4"
+        }
+      ]
+    },
+    "AMPLIFY_function_AuthUserMutationTrigger_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AuthUserMutationTrigger"
+        }
+      ]
+    },
+    "AMPLIFY_function_AuthUserMutationTrigger_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AuthUserMutationTrigger"
+        }
+      ]
+    },
+    "AMPLIFY_function_DBTableBackFill_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "DBTableBackFill"
+        }
+      ]
+    },
+    "AMPLIFY_function_DBTableBackFill_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "DBTableBackFill"
+        }
+      ]
+    },
+    "AMPLIFY_function_FifoSQSConnection_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "FifoSQSConnection"
+        }
+      ]
+    },
+    "AMPLIFY_function_FifoSQSConnection_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "FifoSQSConnection"
+        }
+      ]
+    },
+    "AMPLIFY_function_FileDownloader_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "FileDownloader"
+        }
+      ]
+    },
+    "AMPLIFY_function_FileDownloader_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "FileDownloader"
+        }
+      ]
+    },
+    "AMPLIFY_function_FileProcessorApiTrigger_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "FileProcessorApiTrigger"
+        }
+      ]
+    },
+    "AMPLIFY_function_FileProcessorApiTrigger_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "FileProcessorApiTrigger"
+        }
+      ]
+    },
+    "AMPLIFY_function_GenBucketKey_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GenBucketKey"
+        }
+      ]
+    },
+    "AMPLIFY_function_GenBucketKey_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GenBucketKey"
+        }
+      ]
+    },
+    "AMPLIFY_function_GqlApiInvoke_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GqlApiInvoke"
+        }
+      ]
+    },
+    "AMPLIFY_function_GqlApiInvoke_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GqlApiInvoke"
+        }
+      ]
+    },
+    "AMPLIFY_function_IoTQuery_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "IoTQuery"
+        }
+      ]
+    },
+    "AMPLIFY_function_IoTQuery_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "IoTQuery"
+        }
+      ]
+    },
+    "AMPLIFY_function_IoTRobotEventTrigger_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "IoTRobotEventTrigger"
+        }
+      ]
+    },
+    "AMPLIFY_function_IoTRobotEventTrigger_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "IoTRobotEventTrigger"
+        }
+      ]
+    },
+    "AMPLIFY_function_IoTShadowLogger_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "IoTShadowLogger"
+        }
+      ]
+    },
+    "AMPLIFY_function_IoTShadowLogger_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "IoTShadowLogger"
+        }
+      ]
+    },
+    "AMPLIFY_function_LabelDatasetTrigger_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "LabelDatasetTrigger"
+        }
+      ]
+    },
+    "AMPLIFY_function_LabelDatasetTrigger_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "LabelDatasetTrigger"
+        }
+      ]
+    },
+    "AMPLIFY_function_RegionFileInfoTrig_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "RegionFileInfoTrig"
+        }
+      ]
+    },
+    "AMPLIFY_function_RegionFileInfoTrig_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "RegionFileInfoTrig"
+        }
+      ]
+    },
+    "AMPLIFY_function_ReqPresignURL_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "ReqPresignURL"
+        }
+      ]
+    },
+    "AMPLIFY_function_ReqPresignURL_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "ReqPresignURL"
+        }
+      ]
+    },
+    "AMPLIFY_function_S3RobotDataTrigger_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "S3RobotDataTrigger"
+        }
+      ]
+    },
+    "AMPLIFY_function_S3RobotDataTrigger_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "S3RobotDataTrigger"
+        }
+      ]
+    },
+    "AMPLIFY_function_StoreBucketKey_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "StoreBucketKey"
+        }
+      ]
+    },
+    "AMPLIFY_function_StoreBucketKey_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "StoreBucketKey"
+        }
+      ]
+    },
+    "AMPLIFY_function_TaskEventManager_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "TaskEventManager"
+        }
+      ]
+    },
+    "AMPLIFY_function_TaskEventManager_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "TaskEventManager"
+        }
+      ]
+    },
+    "AMPLIFY_function_TaskTargetTrigger_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "TaskTargetTrigger"
+        }
+      ]
+    },
+    "AMPLIFY_function_TaskTargetTrigger_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "TaskTargetTrigger"
+        }
+      ]
+    },
+    "AMPLIFY_function_TimeoutMonitor_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "TimeoutMonitor"
+        }
+      ]
+    },
+    "AMPLIFY_function_TimeoutMonitor_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "TimeoutMonitor"
+        }
+      ]
+    },
+    "AMPLIFY_function_proceptgql5d4b5c6dPostConfirmation_GROUP": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "proceptgql5d4b5c6dPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_proceptgql5d4b5c6dPostConfirmation_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "proceptgql5d4b5c6dPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_proceptgql5d4b5c6dPostConfirmation_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "proceptgql5d4b5c6dPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_proceptgql6e877c86DefineAuthChallenge_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "proceptgql6e877c86DefineAuthChallenge"
+        }
+      ]
+    },
+    "AMPLIFY_function_proceptgql6e877c86DefineAuthChallenge_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "proceptgql6e877c86DefineAuthChallenge"
+        }
+      ]
+    },
+    "AMPLIFY_function_proceptgqllayer4Portal_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "proceptgqllayer4Portal"
+        }
+      ]
+    },
+    "AMPLIFY_function_proceptgqllayer4Portal_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "proceptgqllayer4Portal"
+        }
+      ]
+    }
+  },
+  "policy": {
+    "FileDownloaderPolicy": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "LambdaExecutionRole"
+          ],
+          "category": "function",
+          "resourceName": "FileDownloader"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "IAM"
+    },
+    "FileProcessorPolicy": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "LambdaExecutionRole"
+          ],
+          "category": "function",
+          "resourceName": "FileProcessorApiTrigger"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "IAM"
+    },
+    "IoTPolicy": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "LambdaExecutionRole"
+          ],
+          "category": "function",
+          "resourceName": "IoTQuery"
+        },
+        {
+          "attributes": [
+            "LambdaExecutionRole"
+          ],
+          "category": "function",
+          "resourceName": "ReqPresignURL"
+        },
+        {
+          "attributes": [
+            "LambdaExecutionRole"
+          ],
+          "category": "function",
+          "resourceName": "TaskTargetTrigger"
+        },
+        {
+          "attributes": [
+            "LambdaExecutionRole"
+          ],
+          "category": "function",
+          "resourceName": "TimeoutMonitor"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "IAM"
+    }
+  },
+  "sns": {
+    "fileDispatcher": {
+      "providerPlugin": "awscloudformation",
+      "service": "SNS"
+    }
+  },
+  "sqs": {
+    "RegionalFileInfoSQS": {
+      "providerPlugin": "awscloudformation",
+      "service": "SQS"
+    }
+  },
+  "storage": {
+    "AuthUserBackDB": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    },
+    "ProceptRobotData": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "LambdaExecutionRole"
+          ],
+          "category": "function",
+          "resourceName": "S3RobotDataTrigger"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "S3"
+    }
+  }
+}

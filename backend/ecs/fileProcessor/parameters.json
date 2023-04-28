@@ -1,0 +1,10 @@
+{
+    "CloudWatchRule": "NONE",
+    "Image": "427832089164.dkr.ecr.us-west-2.amazonaws.com/procept_fp",
+    "apiproceptgqlGraphQLAPIIdOutput": { 
+        "Fn::GetAtt": [
+            "apiproceptgql", 
+            "Outputs.GraphQLAPIIdOutput"
+        ]
+    }
+}

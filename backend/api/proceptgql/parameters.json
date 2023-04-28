@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "[***]tgql",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": "[***]se",
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authproceptgql5d4b5c6d",
+      "Outputs.UserPoolId"
+    ]
+  }
+}

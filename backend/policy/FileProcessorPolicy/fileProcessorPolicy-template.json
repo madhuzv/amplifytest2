@@ -1,0 +1,52 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "policy file",
+    "Parameters": {
+      "functionFileProcessorApiTriggerLambdaExecutionRole": {
+        "Type": "String"
+      },
+      "env": {
+        "Type": "String"
+      }
+    },
+    "Conditions": {
+      "ShouldNotCreateEnvResources": {
+        "Fn::Equals": [
+          {
+            "Ref": "env"
+          },
+          "NONE"
+        ]
+      }
+    },
+    "Resources": {
+      "AmplifyResourcesPolicy": {
+        "Type": "AWS::IAM::Policy",
+        "Properties": {
+          "PolicyName": "amplify-lambda-execution-policy-file-processor",
+          "Roles": [
+            {
+              "Ref": "functionFileProcessorApiTriggerLambdaExecutionRole"
+            }
+          ],
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "s3:PutObject",
+                  "s3:GetObject",
+                  "s3:ListBucket",
+                  "s3:DeleteObject"
+                ],
+                "Resource": "arn:aws:s3:::*"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+  
+  

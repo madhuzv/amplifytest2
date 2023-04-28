@@ -1,0 +1,34 @@
+{
+    "bucketName": "[***]ept-[***]ot-[***]ta",
+    "authPolicyName": "[***]9f88d108",
+    "unauthPolicyName": "[***]9f88d108",
+    "authRoleName": {
+        "Ref": "AuthRoleName"
+    },
+    "unauthRoleName": {
+        "Ref": "UnauthRoleName"
+    },
+    "selectedGuestPermissions": [
+        "s3:GetObject",
+        "s3:ListBucket"
+    ],
+    "selectedAuthenticatedPermissions": [
+        "s3:GetObject",
+        "s3:ListBucket"
+    ],
+    "authproceptgql5d4b5c6dUserPoolId": {
+        "Fn::GetAtt": [
+            "authproceptgql5d4b5c6d",
+            "Outputs.UserPoolId"
+        ]
+    },
+    "s3PermissionsGuestPublic": "DISALLOW",
+    "s3PermissionsGuestUploads": "DISALLOW",
+    "GuestAllowList": "DISALLOW",
+    "s3PermissionsAuthenticatedPublic": "DISALLOW",
+    "s3PermissionsAuthenticatedProtected": "DISALLOW",
+    "s3PermissionsAuthenticatedPrivate": "DISALLOW",
+    "s3PermissionsAuthenticatedUploads": "DISALLOW",
+    "AuthenticatedAllowList": "DISALLOW",
+    "triggerFunction": "S3RobotDataTrigger"
+}

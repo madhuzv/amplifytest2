@@ -1,0 +1,15 @@
+{
+    "functionIoTQueryLambdaExecutionRole": {
+      "Fn::GetAtt": ["functionIoTQuery", "Outputs.LambdaExecutionRole"]
+    },
+    "functionReqPresignURLLambdaExecutionRole": {
+      "Fn::GetAtt": ["functionReqPresignURL", "Outputs.LambdaExecutionRole"]
+    },
+    "functionTaskTargetTriggerLambdaExecutionRole": {
+      "Fn::GetAtt": ["functionTaskTargetTrigger", "Outputs.LambdaExecutionRole"]
+    },
+    "functionTimeoutMonitorLambdaExecutionRole": {
+      "Fn::GetAtt": ["functionTimeoutMonitor", "Outputs.LambdaExecutionRole"]
+    } 
+}
+  

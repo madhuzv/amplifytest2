@@ -1,0 +1,1352 @@
+{
+  "Description": "Root Stack for AWS Amplify CLI",
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Parameters": {
+    "DeploymentBucketName": {
+      "Type": "String",
+      "Default": "DeploymentBucket",
+      "Description": "Name of the common deployment bucket provided by the parent stack"
+    },
+    "AuthRoleName": {
+      "Type": "String",
+      "Default": "AuthRoleName",
+      "Description": "Name of the common deployment bucket provided by the parent stack"
+    },
+    "UnauthRoleName": {
+      "Type": "String",
+      "Default": "UnAuthRoleName",
+      "Description": "Name of the common deployment bucket provided by the parent stack"
+    }
+  },
+  "Outputs": {
+    "Region": {
+      "Description": "CloudFormation provider root stack Region",
+      "Value": {
+        "Ref": "AWS::Region"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "${AWS::StackName}-Region"
+        }
+      }
+    },
+    "StackName": {
+      "Description": "CloudFormation provider root stack ID",
+      "Value": {
+        "Ref": "AWS::StackName"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "${AWS::StackName}-StackName"
+        }
+      }
+    },
+    "StackId": {
+      "Description": "CloudFormation provider root stack name",
+      "Value": {
+        "Ref": "AWS::StackId"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "${AWS::StackName}-StackId"
+        }
+      }
+    },
+    "AuthRoleArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "AuthRole",
+          "Arn"
+        ]
+      }
+    },
+    "UnauthRoleArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "UnauthRole",
+          "Arn"
+        ]
+      }
+    },
+    "DeploymentBucketName": {
+      "Description": "CloudFormation provider root stack deployment bucket name",
+      "Value": {
+        "Ref": "DeploymentBucketName"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "${AWS::StackName}-DeploymentBucketName"
+        }
+      }
+    },
+    "AuthRoleName": {
+      "Value": {
+        "Ref": "AuthRole"
+      }
+    },
+    "UnauthRoleName": {
+      "Value": {
+        "Ref": "UnauthRole"
+      }
+    }
+  },
+  "Resources": {
+    "DeploymentBucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": {
+          "Ref": "DeploymentBucketName"
+        },
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        }
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain"
+    },
+    "AuthRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "",
+              "Effect": "Deny",
+              "Principal": {
+                "Federated": "cognito-identity.amazonaws.com"
+              },
+              "Action": "sts:AssumeRoleWithWebIdentity"
+            }
+          ]
+        },
+        "RoleName": {
+          "Ref": "AuthRoleName"
+        }
+      }
+    },
+    "UnauthRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "",
+              "Effect": "Deny",
+              "Principal": {
+                "Federated": "cognito-identity.amazonaws.com"
+              },
+              "Action": "sts:AssumeRoleWithWebIdentity"
+            }
+          ]
+        },
+        "RoleName": {
+          "Ref": "UnauthRoleName"
+        }
+      }
+    },
+    "snsfileDispatcher": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/sns/template.json",
+        "Parameters": {
+          "env": "gqldev"
+        }
+      }
+    },
+    "sqsRegionalFileInfoSQS": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/sqs/RegionalFileInfoSQS-cloudformation-template.json",
+        "Parameters": {
+          "env": "gqldev"
+        }
+      }
+    },
+    "ecsfileProcessor": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/ecs/template.json",
+        "Parameters": {
+          "CloudWatchRule": "NONE",
+          "Image": "427832089164.dkr.ecr.us-west-2.amazonaws.com/procept_fp",
+          "apiproceptgqlGraphQLAPIIdOutput": {
+            "Fn::GetAtt": [
+              "apiproceptgql",
+              "Outputs.GraphQLAPIIdOutput"
+            ]
+          },
+          "storageProceptRobotDataBucketName": {
+            "Fn::GetAtt": [
+              "storageProceptRobotData",
+              "Outputs.BucketName"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "policyIoTPolicy": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/policy/ioTPolicy-template.json",
+        "Parameters": {
+          "functionIoTQueryLambdaExecutionRole": {
+            "Fn::GetAtt": [
+              "functionIoTQuery",
+              "Outputs.LambdaExecutionRole"
+            ]
+          },
+          "functionReqPresignURLLambdaExecutionRole": {
+            "Fn::GetAtt": [
+              "functionReqPresignURL",
+              "Outputs.LambdaExecutionRole"
+            ]
+          },
+          "functionTaskTargetTriggerLambdaExecutionRole": {
+            "Fn::GetAtt": [
+              "functionTaskTargetTrigger",
+              "Outputs.LambdaExecutionRole"
+            ]
+          },
+          "functionTimeoutMonitorLambdaExecutionRole": {
+            "Fn::GetAtt": [
+              "functionTimeoutMonitor",
+              "Outputs.LambdaExecutionRole"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "policyFileDownloaderPolicy": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/policy/fileDownloaderPolicy-template.json",
+        "Parameters": {
+          "functionFileDownloaderLambdaExecutionRole": {
+            "Fn::GetAtt": [
+              "functionFileDownloader",
+              "Outputs.LambdaExecutionRole"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "policyFileProcessorPolicy": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/policy/fileProcessorPolicy-template.json",
+        "Parameters": {
+          "functionFileProcessorApiTriggerLambdaExecutionRole": {
+            "Fn::GetAtt": [
+              "functionFileProcessorApiTrigger",
+              "Outputs.LambdaExecutionRole"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "functionproceptgql6e877c86DefineAuthChallenge": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/function/proceptgql6e877c86DefineAuthChallenge-cloudformation-template.json",
+        "Parameters": {
+          "modules": "captcha-define-challenge,boilerplate-define-challenge",
+          "resourceName": "proceptgql6e877c86DefineAuthChallenge",
+          "deploymentBucketName": "amplify-procept-gql-gqldev-162227-deployment",
+          "s3Key": "amplify-builds/proceptgql6e877c86DefineAuthChallenge-4657414936336459785a-build.zip",
+          "env": "gqldev"
+        }
+      }
+    },
+    "functionAdminQueriesc5e8fdc4": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/function/AdminQueriesc5e8fdc4-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-procept-gql-gqldev-162227-deployment",
+          "s3Key": "amplify-builds/AdminQueriesc5e8fdc4-516633707746554c2b4e-build.zip",
+          "authproceptgql5d4b5c6dUserPoolId": {
+            "Fn::GetAtt": [
+              "authproceptgql5d4b5c6d",
+              "Outputs.UserPoolId"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "functionAuthUserMutationTrigger": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/function/AuthUserMutationTrigger-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-procept-gql-gqldev-162227-deployment",
+          "s3Key": "amplify-builds/AuthUserMutationTrigger-414738534f564238324a-build.zip",
+          "apiproceptgqlGraphQLAPIIdOutput": {
+            "Fn::GetAtt": [
+              "apiproceptgql",
+              "Outputs.GraphQLAPIIdOutput"
+            ]
+          },
+          "apiproceptgqlGraphQLAPIEndpointOutput": {
+            "Fn::GetAtt": [
+              "apiproceptgql",
+              "Outputs.GraphQLAPIEndpointOutput"
+            ]
+          },
+          "authproceptgql5d4b5c6dUserPoolId": {
+            "Fn::GetAtt": [
+              "authproceptgql5d4b5c6d",
+              "Outputs.UserPoolId"
+            ]
+          },
+          "storageAuthUserBackDBName": {
+            "Fn::GetAtt": [
+              "storageAuthUserBackDB",
+              "Outputs.Name"
+            ]
+          },
+          "storageAuthUserBackDBArn": {
+            "Fn::GetAtt": [
+              "storageAuthUserBackDB",
+              "Outputs.Arn"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "functionGqlApiInvoke": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/function/GqlApiInvoke-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-procept-gql-gqldev-162227-deployment",
+          "s3Key": "amplify-builds/GqlApiInvoke-747265394c2f57324c2b-build.zip",
+          "apiproceptgqlGraphQLAPIIdOutput": {
+            "Fn::GetAtt": [
+              "apiproceptgql",
+              "Outputs.GraphQLAPIIdOutput"
+            ]
+          },
+          "apiproceptgqlGraphQLAPIEndpointOutput": {
+            "Fn::GetAtt": [
+              "apiproceptgql",
+              "Outputs.GraphQLAPIEndpointOutput"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "functionIoTQuery": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/function/IoTQuery-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-procept-gql-gqldev-162227-deployment",
+          "s3Key": "amplify-builds/IoTQuery-59777071592b51366768-build.zip",
+          "functionproceptgqllayer4PortalArn": {
+            "Fn::GetAtt": [
+              "functionproceptgqllayer4Portal",
+              "Outputs.Arn"
+            ]
+          },
+          "authproceptgql5d4b5c6dUserPoolId": {
+            "Fn::GetAtt": [
+              "authproceptgql5d4b5c6d",
+              "Outputs.UserPoolId"
+            ]
+          },
+          "storageProceptRobotDataBucketName": {
+            "Fn::GetAtt": [
+              "storageProceptRobotData",
+              "Outputs.BucketName"
+            ]
+          },
+          "apiproceptgqlGraphQLAPIIdOutput": {
+            "Fn::GetAtt": [
+              "apiproceptgql",
+              "Outputs.GraphQLAPIIdOutput"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "functionReqPresignURL": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/function/ReqPresignURL-cloudformation-template.json",
+        "Parameters": {
+          "snsfileDispatcherSessionDataTopic": {
+            "Fn::GetAtt": [
+              "snsfileDispatcher",
+              "Outputs.SessionDataTopic"
+            ]
+          },
+          "deploymentBucketName": "amplify-procept-gql-gqldev-162227-deployment",
+          "s3Key": "amplify-builds/ReqPresignURL-6e3666564433306e2f49-build.zip",
+          "functionproceptgqllayer4PortalArn": {
+            "Fn::GetAtt": [
+              "functionproceptgqllayer4Portal",
+              "Outputs.Arn"
+            ]
+          },
+          "storageProceptRobotDataBucketName": {
+            "Fn::GetAtt": [
+              "storageProceptRobotData",
+              "Outputs.BucketName"
+            ]
+          },
+          "functionGenBucketKeyName": {
+            "Fn::GetAtt": [
+              "functionGenBucketKey",
+              "Outputs.Name"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "functionStoreBucketKey": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/function/StoreBucketKey-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-procept-gql-gqldev-162227-deployment",
+          "s3Key": "amplify-builds/StoreBucketKey-724665514d742f794236-build.zip",
+          "functionGqlApiInvokeName": {
+            "Fn::GetAtt": [
+              "functionGqlApiInvoke",
+              "Outputs.Name"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "functionGenBucketKey": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/function/GenBucketKey-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-procept-gql-gqldev-162227-deployment",
+          "s3Key": "amplify-builds/GenBucketKey-52433730667358783249-build.zip",
+          "functionStoreBucketKeyName": {
+            "Fn::GetAtt": [
+              "functionStoreBucketKey",
+              "Outputs.Name"
+            ]
+          },
+          "storageProceptRobotDataBucketName": {
+            "Fn::GetAtt": [
+              "storageProceptRobotData",
+              "Outputs.BucketName"
+            ]
+          },
+          "apiproceptgqlGraphQLAPIIdOutput": {
+            "Fn::GetAtt": [
+              "apiproceptgql",
+              "Outputs.GraphQLAPIIdOutput"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "functionproceptgql5d4b5c6dPostConfirmation": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/function/proceptgql5d4b5c6dPostConfirmation-cloudformation-template.json",
+        "Parameters": {
+          "modules": "add-to-group",
+          "resourceName": "proceptgql5d4b5c6dPostConfirmation",
+          "GROUP": "Engineer",
+          "deploymentBucketName": "amplify-procept-gql-gqldev-162227-deployment",
+          "s3Key": "amplify-builds/proceptgql5d4b5c6dPostConfirmation-72416558784e45706264-build.zip",
+          "storageAuthUserBackDBName": {
+            "Fn::GetAtt": [
+              "storageAuthUserBackDB",
+              "Outputs.Name"
+            ]
+          },
+          "storageAuthUserBackDBArn": {
+            "Fn::GetAtt": [
+              "storageAuthUserBackDB",
+              "Outputs.Arn"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "functionFileProcessorApiTrigger": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/function/FileProcessorApiTrigger-cloudformation-template.json",
+        "Parameters": {
+          "CloudWatchRule": "NONE",
+          "ecsfileProcessorPrivateSubnet": {
+            "Fn::GetAtt": [
+              "ecsfileProcessor",
+              "Outputs.PrivateSubnet"
+            ]
+          },
+          "snsfileDispatcherSessionDataTopic": {
+            "Fn::GetAtt": [
+              "snsfileDispatcher",
+              "Outputs.SessionDataTopic"
+            ]
+          },
+          "snsfileDispatcherAppLogTopic": {
+            "Fn::GetAtt": [
+              "snsfileDispatcher",
+              "Outputs.AppLogTopic"
+            ]
+          },
+          "snsfileDispatcherPortalUploadDataTopic": {
+            "Fn::GetAtt": [
+              "snsfileDispatcher",
+              "Outputs.PortalUploadDataTopic"
+            ]
+          },
+          "snsfileDispatcherAIPredictionTopic": {
+            "Fn::GetAtt": [
+              "snsfileDispatcher",
+              "Outputs.AIPredictionTopic"
+            ]
+          },
+          "deploymentBucketName": "amplify-procept-gql-gqldev-162227-deployment",
+          "s3Key": "amplify-builds/FileProcessorApiTrigger-364e43326a646830594a-build.zip",
+          "functionFifoSQSConnectionName": {
+            "Fn::GetAtt": [
+              "functionFifoSQSConnection",
+              "Outputs.Name"
+            ]
+          },
+          "storageProceptRobotDataBucketName": {
+            "Fn::GetAtt": [
+              "storageProceptRobotData",
+              "Outputs.BucketName"
+            ]
+          },
+          "apiproceptgqlGraphQLAPIIdOutput": {
+            "Fn::GetAtt": [
+              "apiproceptgql",
+              "Outputs.GraphQLAPIIdOutput"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "functionS3RobotDataTrigger": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/function/S3RobotDataTrigger-cloudformation-template.json",
+        "Parameters": {
+          "snsfileDispatcherSessionDataTopic": {
+            "Fn::GetAtt": [
+              "snsfileDispatcher",
+              "Outputs.SessionDataTopic"
+            ]
+          },
+          "snsfileDispatcherAppLogTopic": {
+            "Fn::GetAtt": [
+              "snsfileDispatcher",
+              "Outputs.AppLogTopic"
+            ]
+          },
+          "snsfileDispatcherPortalUploadDataTopic": {
+            "Fn::GetAtt": [
+              "snsfileDispatcher",
+              "Outputs.PortalUploadDataTopic"
+            ]
+          },
+          "snsfileDispatcherAIPredictionTopic": {
+            "Fn::GetAtt": [
+              "snsfileDispatcher",
+              "Outputs.AIPredictionTopic"
+            ]
+          },
+          "deploymentBucketName": "amplify-procept-gql-gqldev-162227-deployment",
+          "s3Key": "amplify-builds/S3RobotDataTrigger-4c6b592f6a4a39573170-build.zip",
+          "functionAIProcessReceiverName": {
+            "Fn::GetAtt": [
+              "functionAIProcessReceiver",
+              "Outputs.Name"
+            ]
+          },
+          "apiproceptgqlGraphQLAPIIdOutput": {
+            "Fn::GetAtt": [
+              "apiproceptgql",
+              "Outputs.GraphQLAPIIdOutput"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "functionFifoSQSConnection": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/function/FifoSQSConnection-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-procept-gql-gqldev-162227-deployment",
+          "s3Key": "amplify-builds/FifoSQSConnection-376d6c74666b444f5259-build.zip",
+          "env": "gqldev"
+        }
+      }
+    },
+    "functionFileDownloader": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/function/FileDownloader-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-procept-gql-gqldev-162227-deployment",
+          "s3Key": "amplify-builds/FileDownloader-515777704e64515a5259-build.zip",
+          "storageProceptRobotDataBucketName": {
+            "Fn::GetAtt": [
+              "storageProceptRobotData",
+              "Outputs.BucketName"
+            ]
+          },
+          "apiproceptgqlGraphQLAPIIdOutput": {
+            "Fn::GetAtt": [
+              "apiproceptgql",
+              "Outputs.GraphQLAPIIdOutput"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "functionIoTShadowLogger": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/function/IoTShadowLogger-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-procept-gql-gqldev-162227-deployment",
+          "s3Key": "amplify-builds/IoTShadowLogger-5231533371342b355167-build.zip",
+          "env": "gqldev"
+        }
+      }
+    },
+    "functionIoTRobotEventTrigger": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/function/IoTRobotEventTrigger-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-procept-gql-gqldev-162227-deployment",
+          "s3Key": "amplify-builds/IoTRobotEventTrigger-48786436347a2b526272-build.zip",
+          "apiproceptgqlGraphQLAPIIdOutput": {
+            "Fn::GetAtt": [
+              "apiproceptgql",
+              "Outputs.GraphQLAPIIdOutput"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "functionDBTableBackFill": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/function/DBTableBackFill-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-procept-gql-gqldev-162227-deployment",
+          "s3Key": "amplify-builds/DBTableBackFill-532b426b524671304a59-build.zip",
+          "apiproceptgqlGraphQLAPIIdOutput": {
+            "Fn::GetAtt": [
+              "apiproceptgql",
+              "Outputs.GraphQLAPIIdOutput"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "functionRegionFileInfoTrig": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/function/RegionFileInfoTrig-cloudformation-template.json",
+        "Parameters": {
+          "sqsRegionalFileInfoSQSName": {
+            "Fn::GetAtt": [
+              "sqsRegionalFileInfoSQS",
+              "Outputs.Name"
+            ]
+          },
+          "sqsRegionalFileInfoSQSArn": {
+            "Fn::GetAtt": [
+              "sqsRegionalFileInfoSQS",
+              "Outputs.Arn"
+            ]
+          },
+          "snsfileDispatcherSessionDataTopic": {
+            "Fn::GetAtt": [
+              "snsfileDispatcher",
+              "Outputs.SessionDataTopic"
+            ]
+          },
+          "deploymentBucketName": "amplify-procept-gql-gqldev-162227-deployment",
+          "s3Key": "amplify-builds/RegionFileInfoTrig-4b69484e643065487672-build.zip",
+          "functionStoreBucketKeyName": {
+            "Fn::GetAtt": [
+              "functionStoreBucketKey",
+              "Outputs.Name"
+            ]
+          },
+          "functionIoTRobotEventTriggerName": {
+            "Fn::GetAtt": [
+              "functionIoTRobotEventTrigger",
+              "Outputs.Name"
+            ]
+          },
+          "functionTaskEventManagerName": {
+            "Fn::GetAtt": [
+              "functionTaskEventManager",
+              "Outputs.Name"
+            ]
+          },
+          "apiproceptgqlGraphQLAPIIdOutput": {
+            "Fn::GetAtt": [
+              "apiproceptgql",
+              "Outputs.GraphQLAPIIdOutput"
+            ]
+          },
+          "functionproceptgqllayer4PortalArn": {
+            "Fn::GetAtt": [
+              "functionproceptgqllayer4Portal",
+              "Outputs.Arn"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "functionproceptgqllayer4Portal": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/function/proceptgqllayer4Portal-awscloudformation-template.json",
+        "Parameters": {
+          "runtimes": "nodejs14.x",
+          "description": "Updated layer version 2022-10-19T16:50:54.627Z",
+          "deploymentBucketName": "amplify-procept-gql-gqldev-162227-deployment",
+          "s3Key": "amplify-builds/proceptgqllayer4Portal-LambdaLayerVersion98d099f5-build.zip",
+          "env": "gqldev"
+        }
+      }
+    },
+    "functionTaskTargetTrigger": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/function/TaskTargetTrigger-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-procept-gql-gqldev-162227-deployment",
+          "s3Key": "amplify-builds/TaskTargetTrigger-737162536b7270707836-build.zip",
+          "functionTaskEventManagerName": {
+            "Fn::GetAtt": [
+              "functionTaskEventManager",
+              "Outputs.Name"
+            ]
+          },
+          "apiproceptgqlGraphQLAPIIdOutput": {
+            "Fn::GetAtt": [
+              "apiproceptgql",
+              "Outputs.GraphQLAPIIdOutput"
+            ]
+          },
+          "functionproceptgqllayer4PortalArn": {
+            "Fn::GetAtt": [
+              "functionproceptgqllayer4Portal",
+              "Outputs.Arn"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "functionTaskEventManager": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/function/TaskEventManager-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-procept-gql-gqldev-162227-deployment",
+          "s3Key": "amplify-builds/TaskEventManager-776a655755447074634e-build.zip",
+          "apiproceptgqlGraphQLAPIIdOutput": {
+            "Fn::GetAtt": [
+              "apiproceptgql",
+              "Outputs.GraphQLAPIIdOutput"
+            ]
+          },
+          "functionproceptgqllayer4PortalArn": {
+            "Fn::GetAtt": [
+              "functionproceptgqllayer4Portal",
+              "Outputs.Arn"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "functionTimeoutMonitor": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/function/TimeoutMonitor-cloudformation-template.json",
+        "Parameters": {
+          "CloudWatchRule": "rate(1 minute)",
+          "deploymentBucketName": "amplify-procept-gql-gqldev-162227-deployment",
+          "s3Key": "amplify-builds/TimeoutMonitor-5a43535748755a4a6352-build.zip",
+          "functionTaskEventManagerName": {
+            "Fn::GetAtt": [
+              "functionTaskEventManager",
+              "Outputs.Name"
+            ]
+          },
+          "apiproceptgqlGraphQLAPIIdOutput": {
+            "Fn::GetAtt": [
+              "apiproceptgql",
+              "Outputs.GraphQLAPIIdOutput"
+            ]
+          },
+          "functionproceptgqllayer4PortalArn": {
+            "Fn::GetAtt": [
+              "functionproceptgqllayer4Portal",
+              "Outputs.Arn"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "functionLabelDatasetTrigger": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/function/LabelDatasetTrigger-cloudformation-template.json",
+        "Parameters": {
+          "snsfileDispatcherAIPredictionTopic": {
+            "Fn::GetAtt": [
+              "snsfileDispatcher",
+              "Outputs.AIPredictionTopic"
+            ]
+          },
+          "deploymentBucketName": "amplify-procept-gql-gqldev-162227-deployment",
+          "s3Key": "amplify-builds/LabelDatasetTrigger-685a744f4b7042355558-build.zip",
+          "storageProceptRobotDataBucketName": {
+            "Fn::GetAtt": [
+              "storageProceptRobotData",
+              "Outputs.BucketName"
+            ]
+          },
+          "apiproceptgqlGraphQLAPIIdOutput": {
+            "Fn::GetAtt": [
+              "apiproceptgql",
+              "Outputs.GraphQLAPIIdOutput"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "functionAIPrediction": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/function/AIPrediction-cloudformation-template.json",
+        "Parameters": {
+          "snsfileDispatcherAIPredictionTopic": {
+            "Fn::GetAtt": [
+              "snsfileDispatcher",
+              "Outputs.AIPredictionTopic"
+            ]
+          },
+          "deploymentBucketName": "amplify-procept-gql-gqldev-162227-deployment",
+          "s3Key": "amplify-builds/AIPrediction-6d4f6163465a504f514c-build.zip",
+          "functionAIProcessReceiverName": {
+            "Fn::GetAtt": [
+              "functionAIProcessReceiver",
+              "Outputs.Name"
+            ]
+          },
+          "storageProceptRobotDataBucketName": {
+            "Fn::GetAtt": [
+              "storageProceptRobotData",
+              "Outputs.BucketName"
+            ]
+          },
+          "apiproceptgqlGraphQLAPIIdOutput": {
+            "Fn::GetAtt": [
+              "apiproceptgql",
+              "Outputs.GraphQLAPIIdOutput"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "functionAIProcessReceiver": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/function/AIProcessReceiver-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-procept-gql-gqldev-162227-deployment",
+          "s3Key": "amplify-builds/AIProcessReceiver-61554b38746474752f37-build.zip",
+          "functionGqlApiInvokeName": {
+            "Fn::GetAtt": [
+              "functionGqlApiInvoke",
+              "Outputs.Name"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "authproceptgql5d4b5c6d": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/auth/proceptgql5d4b5c6d-cloudformation-template.yml",
+        "Parameters": {
+          "identityPoolName": "proceptgql5d4b5c6d_identitypool_dc5fafc4",
+          "allowUnauthenticatedIdentities": false,
+          "resourceNameTruncated": "procep5d4b5c6d",
+          "userPoolName": "proceptgql5d4b5c6d_userpool_5d4b5c6d",
+          "autoVerifiedAttributes": "email",
+          "mfaConfiguration": "OFF",
+          "mfaTypes": "SMS Text Message",
+          "smsAuthenticationMessage": "Your authentication code is {####}",
+          "smsVerificationMessage": "Your verification code is {####}",
+          "emailVerificationSubject": "Your verification code",
+          "emailVerificationMessage": "Your verification code is {####}",
+          "defaultPasswordPolicy": false,
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": "",
+          "requiredAttributes": "email",
+          "aliasAttributes": "",
+          "userpoolClientGenerateSecret": true,
+          "userpoolClientRefreshTokenValidity": 30,
+          "userpoolClientWriteAttributes": "email",
+          "userpoolClientReadAttributes": "email",
+          "userpoolClientLambdaRole": "procep5d4b5c6d_userpoolclient_lambda_role",
+          "userpoolClientSetAttributes": false,
+          "resourceName": "proceptgql5d4b5c6d",
+          "authSelections": "identityPoolAndUserPool",
+          "authRoleArn": {
+            "Fn::GetAtt": [
+              "AuthRole",
+              "Arn"
+            ]
+          },
+          "unauthRoleArn": {
+            "Fn::GetAtt": [
+              "UnauthRole",
+              "Arn"
+            ]
+          },
+          "useDefault": "manual",
+          "usernameAttributes": "email",
+          "userPoolGroupList": "Admin,Engineer,FieldEngineer,Manufactory,Analysis",
+          "dependsOn": "[object Object]",
+          "userPoolGroups": false,
+          "adminQueries": false,
+          "triggers": "{\n  \"PostConfirmation\": [\n    \"add-to-group\"\n  ]\n}",
+          "hostedUI": true,
+          "parentStack": {
+            "Ref": "AWS::StackId"
+          },
+          "permissions": "{\n  \"policyName\": \"AddToGroupCognito\",\n  \"trigger\": \"PostConfirmation\",\n  \"effect\": \"Allow\",\n  \"actions\": [\n    \"cognito-idp:AdminAddUserToGroup\",\n    \"cognito-idp:GetGroup\",\n    \"cognito-idp:CreateGroup\"\n  ],\n  \"resource\": {\n    \"paramType\": \"!GetAtt\",\n    \"keys\": [\n      \"UserPool\",\n      \"Arn\"\n    ]\n  }\n}",
+          "serviceName": "Cognito",
+          "breakCircularDependency": false,
+          "authProviders": "",
+          "thirdPartyAuth": false,
+          "hostedUIDomainName": "proceptgql5d4b5c6d-dev",
+          "authProvidersUserPool": "",
+          "hostedUIProviderMeta": "[]",
+          "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"implicit\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:3000/\",\"https://master.d2zslx120k55ro.amplifyapp.com/\"],\"LogoutURLs\":[\"http://localhost:3000/\",\"https://master.d2zslx120k55ro.amplifyapp.com/\"]}",
+          "hostedUIProviderCreds": "[]",
+          "functionproceptgql5d4b5c6dPostConfirmationArn": {
+            "Fn::GetAtt": [
+              "functionproceptgql5d4b5c6dPostConfirmation",
+              "Outputs.Arn"
+            ]
+          },
+          "functionproceptgql5d4b5c6dPostConfirmationName": {
+            "Fn::GetAtt": [
+              "functionproceptgql5d4b5c6dPostConfirmation",
+              "Outputs.Name"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "authuserPoolGroups": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/auth/template.json",
+        "Parameters": {
+          "AuthRoleArn": {
+            "Fn::GetAtt": [
+              "AuthRole",
+              "Arn"
+            ]
+          },
+          "UnauthRoleArn": {
+            "Fn::GetAtt": [
+              "UnauthRole",
+              "Arn"
+            ]
+          },
+          "authproceptgql5d4b5c6dUserPoolId": {
+            "Fn::GetAtt": [
+              "authproceptgql5d4b5c6d",
+              "Outputs.UserPoolId"
+            ]
+          },
+          "authproceptgql5d4b5c6dAppClientIDWeb": {
+            "Fn::GetAtt": [
+              "authproceptgql5d4b5c6d",
+              "Outputs.AppClientIDWeb"
+            ]
+          },
+          "authproceptgql5d4b5c6dAppClientID": {
+            "Fn::GetAtt": [
+              "authproceptgql5d4b5c6d",
+              "Outputs.AppClientID"
+            ]
+          },
+          "authproceptgql5d4b5c6dIdentityPoolId": {
+            "Fn::GetAtt": [
+              "authproceptgql5d4b5c6d",
+              "Outputs.IdentityPoolId"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "apiproceptgql": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+        "Parameters": {
+          "CreateAPIKey": 0,
+          "AppSyncApiName": "proceptgql",
+          "DynamoDBBillingMode": "PAY_PER_REQUEST",
+          "DynamoDBEnableServerSideEncryption": "false",
+          "AuthCognitoUserPoolId": {
+            "Fn::GetAtt": [
+              "authproceptgql5d4b5c6d",
+              "Outputs.UserPoolId"
+            ]
+          },
+          "authRoleName": {
+            "Ref": "AuthRoleName"
+          },
+          "S3DeploymentBucket": "amplify-procept-gql-gqldev-162227-deployment",
+          "S3DeploymentRootKey": "amplify-appsync-files/41fde78a6d62d8094345050be5abff5b71dd8d1a",
+          "ElasticSearchInstanceType": "t2.small.elasticsearch",
+          "ElasticSearchInstanceCount": 3,
+          "env": "gqldev"
+        }
+      }
+    },
+    "apiAdminQueries": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/api/admin-queries-cloudformation-template.json",
+        "Parameters": {
+          "authRoleName": {
+            "Ref": "AuthRoleName"
+          },
+          "unauthRoleName": {
+            "Ref": "UnauthRoleName"
+          },
+          "authproceptgql5d4b5c6dUserPoolId": {
+            "Fn::GetAtt": [
+              "authproceptgql5d4b5c6d",
+              "Outputs.UserPoolId"
+            ]
+          },
+          "functionAdminQueriesc5e8fdc4Arn": {
+            "Fn::GetAtt": [
+              "functionAdminQueriesc5e8fdc4",
+              "Outputs.Arn"
+            ]
+          },
+          "functionAdminQueriesc5e8fdc4Name": {
+            "Fn::GetAtt": [
+              "functionAdminQueriesc5e8fdc4",
+              "Outputs.Name"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "storageAuthUserBackDB": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/storage/AuthUserBackDB-cloudformation-template.json",
+        "Parameters": {
+          "tableName": "AuthUserBackDB",
+          "partitionKeyName": "email",
+          "partitionKeyType": "S",
+          "env": "gqldev"
+        }
+      }
+    },
+    "storageProceptRobotData": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-procept-gql-gqldev-162227-deployment/amplify-cfn-templates/storage/s3-cloudformation-template.json",
+        "Parameters": {
+          "bucketName": "procept-robot-data",
+          "authPolicyName": "s3_amplify_9f88d108",
+          "unauthPolicyName": "s3_amplify_9f88d108",
+          "authRoleName": {
+            "Ref": "AuthRoleName"
+          },
+          "unauthRoleName": {
+            "Ref": "UnauthRoleName"
+          },
+          "selectedGuestPermissions": "s3:GetObject,s3:ListBucket",
+          "selectedAuthenticatedPermissions": "s3:GetObject,s3:ListBucket",
+          "authproceptgql5d4b5c6dUserPoolId": {
+            "Fn::GetAtt": [
+              "authproceptgql5d4b5c6d",
+              "Outputs.UserPoolId"
+            ]
+          },
+          "s3PermissionsGuestPublic": "DISALLOW",
+          "s3PermissionsGuestUploads": "DISALLOW",
+          "GuestAllowList": "DISALLOW",
+          "s3PermissionsAuthenticatedPublic": "DISALLOW",
+          "s3PermissionsAuthenticatedProtected": "DISALLOW",
+          "s3PermissionsAuthenticatedPrivate": "DISALLOW",
+          "s3PermissionsAuthenticatedUploads": "DISALLOW",
+          "AuthenticatedAllowList": "DISALLOW",
+          "triggerFunction": "S3RobotDataTrigger",
+          "functionS3RobotDataTriggerName": {
+            "Fn::GetAtt": [
+              "functionS3RobotDataTrigger",
+              "Outputs.Name"
+            ]
+          },
+          "functionS3RobotDataTriggerArn": {
+            "Fn::GetAtt": [
+              "functionS3RobotDataTrigger",
+              "Outputs.Arn"
+            ]
+          },
+          "functionS3RobotDataTriggerLambdaExecutionRole": {
+            "Fn::GetAtt": [
+              "functionS3RobotDataTrigger",
+              "Outputs.LambdaExecutionRole"
+            ]
+          },
+          "env": "gqldev"
+        }
+      }
+    },
+    "UpdateRolesWithIDPFunction": {
+      "DependsOn": [
+        "AuthRole",
+        "UnauthRole",
+        "authproceptgql5d4b5c6d"
+      ],
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "ZipFile": {
+            "Fn::Join": [
+              "\n",
+              [
+                "const response = require('cfn-response');",
+                "const aws = require('aws-sdk');",
+                "let responseData = {};",
+                "exports.handler = function(event, context) {",
+                "  try {",
+                "    let authRoleName = event.ResourceProperties.authRoleName;",
+                "    let unauthRoleName = event.ResourceProperties.unauthRoleName;",
+                "    let idpId = event.ResourceProperties.idpId;",
+                "    let promises = [];",
+                "    let getPromises = [];",
+                "    let authParamsJson = { 'Version': '2012-10-17','Statement': [{'Effect': 'Allow','Principal': {'Federated': 'cognito-identity.amazonaws.com'},'Action': 'sts:AssumeRoleWithWebIdentity','Condition': {'StringEquals': {'cognito-identity.amazonaws.com:aud': idpId},'ForAnyValue:StringLike': {'cognito-identity.amazonaws.com:amr': 'authenticated'}}}]};",
+                "    let unauthParamsJson = { 'Version': '2012-10-17','Statement': [{'Effect': 'Allow','Principal': {'Federated': 'cognito-identity.amazonaws.com'},'Action': 'sts:AssumeRoleWithWebIdentity','Condition': {'StringEquals': {'cognito-identity.amazonaws.com:aud': idpId},'ForAnyValue:StringLike': {'cognito-identity.amazonaws.com:amr': 'unauthenticated'}}}]};",
+                "    if (event.RequestType == 'Delete') {",
+                "        delete authParamsJson.Statement[0].Condition;",
+                "        delete unauthParamsJson.Statement[0].Condition;",
+                "        let authParams = { PolicyDocument: JSON.stringify(authParamsJson),RoleName: authRoleName};",
+                "        let unauthParams = {PolicyDocument: JSON.stringify(unauthParamsJson),RoleName: unauthRoleName};",
+                "        const iam = new aws.IAM({ apiVersion: '2010-05-08', region: event.ResourceProperties.region});",
+                "        getPromises.push(iam.getRole({RoleName: authParams.RoleName}).promise());",
+                "        getPromises.push(iam.getRole({RoleName: unauthParams.RoleName}).promise());",
+                "        Promise.all(getPromises)",
+                "         .then((res) => {",
+                "        console.log('in res' , res)",
+                "           promises.push(iam.updateAssumeRolePolicy(authParams).promise());",
+                "           promises.push(iam.updateAssumeRolePolicy(unauthParams).promise());",
+                "           return Promise.all(promises)",
+                "             .then((res) => {",
+                "               console.log(\"delete response data\" + JSON.stringify(res));",
+                "               response.send(event, context, response.SUCCESS, {});",
+                "             });",
+                "          })",
+                "           .catch((err) => {",
+                "             console.log(err.stack);",
+                "             responseData = {Error: err};",
+                "             response.send(event, context, response.SUCCESS, responseData);",
+                "             })",
+                "    }",
+                "    if (event.RequestType == 'Update' || event.RequestType == 'Create') {",
+                "       const iam = new aws.IAM({ apiVersion: '2010-05-08', region: event.ResourceProperties.region});",
+                "        let authParams = { PolicyDocument: JSON.stringify(authParamsJson),RoleName: authRoleName};",
+                "        let unauthParams = {PolicyDocument: JSON.stringify(unauthParamsJson),RoleName: unauthRoleName};",
+                "        promises.push(iam.updateAssumeRolePolicy(authParams).promise());",
+                "        promises.push(iam.updateAssumeRolePolicy(unauthParams).promise());",
+                "        Promise.all(promises)",
+                "         .then((res) => {",
+                "            console.log(\"createORupdate\" + res);",
+                "            console.log(\"response data\" + JSON.stringify(res));",
+                "            response.send(event, context, response.SUCCESS, {});",
+                "         });",
+                "    }",
+                "  } catch(err) {",
+                "       console.log(err.stack);",
+                "       responseData = {Error: err};",
+                "       response.send(event, context, response.FAILED, responseData);",
+                "       throw err;",
+                "  }",
+                "};"
+              ]
+            ]
+          }
+        },
+        "Handler": "index.handler",
+        "Runtime": "nodejs14.x",
+        "Timeout": 300,
+        "Role": {
+          "Fn::GetAtt": [
+            "UpdateRolesWithIDPFunctionRole",
+            "Arn"
+          ]
+        }
+      }
+    },
+    "UpdateRolesWithIDPFunctionOutputs": {
+      "Type": "Custom::LambdaCallout",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "UpdateRolesWithIDPFunction",
+            "Arn"
+          ]
+        },
+        "region": {
+          "Ref": "AWS::Region"
+        },
+        "idpId": {
+          "Fn::GetAtt": [
+            "authproceptgql5d4b5c6d",
+            "Outputs.IdentityPoolId"
+          ]
+        },
+        "authRoleName": {
+          "Ref": "AuthRole"
+        },
+        "unauthRoleName": {
+          "Ref": "UnauthRole"
+        }
+      }
+    },
+    "UpdateRolesWithIDPFunctionRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AuthRole"
+              },
+              "-idp"
+            ]
+          ]
+        },
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "UpdateRolesWithIDPFunctionPolicy",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": "arn:aws:logs:*:*:*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "iam:UpdateAssumeRolePolicy",
+                    "iam:GetRole"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "AuthRole",
+                      "Arn"
+                    ]
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "iam:UpdateAssumeRolePolicy",
+                    "iam:GetRole"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "UnauthRole",
+                      "Arn"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

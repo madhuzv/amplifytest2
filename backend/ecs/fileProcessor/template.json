@@ -1,0 +1,1435 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Metadata": {
+        "AWS::CloudFormation::Designer": {
+            "3719fbab-7251-4ba6-b048-86f8fb3ee117": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 160,
+                    "y": 180
+                },
+                "z": 1,
+                "parent": "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                "embeds": []
+            },
+            "8964d63a-e7de-475f-99e6-0cf2e67270ac": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 550,
+                    "y": 270
+                },
+                "z": 3,
+                "parent": "d60d3065-5f89-4e0c-9c17-59ae6d7a5c6c",
+                "embeds": []
+            },
+            "d60d3065-5f89-4e0c-9c17-59ae6d7a5c6c": {
+                "size": {
+                    "width": 130,
+                    "height": 90
+                },
+                "position": {
+                    "x": 520,
+                    "y": 250
+                },
+                "z": 2,
+                "parent": "db59e8d3-8ade-4600-88ec-8cee0c1fc26b",
+                "embeds": [
+                    "8964d63a-e7de-475f-99e6-0cf2e67270ac"
+                ]
+            },
+            "2afd2806-aa6b-4cd6-9143-2cc3d0189536": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 690,
+                    "y": 240
+                },
+                "z": 2,
+                "parent": "db59e8d3-8ade-4600-88ec-8cee0c1fc26b",
+                "embeds": []
+            },
+            "6f2b12a7-1cc6-441f-b771-e8999b3432f7": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 690,
+                    "y": 320
+                },
+                "z": 2,
+                "parent": "db59e8d3-8ade-4600-88ec-8cee0c1fc26b",
+                "embeds": []
+            },
+            "01c8ec68-140f-4963-a73b-a1dff7167e7e": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 290,
+                    "y": 270
+                },
+                "z": 2,
+                "parent": "db59e8d3-8ade-4600-88ec-8cee0c1fc26b",
+                "embeds": [],
+                "dependson": [
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8"
+                ]
+            },
+            "f288da4a-e50e-484c-8edc-b82ae31cc2c7": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 420,
+                    "y": 270
+                },
+                "z": 2,
+                "parent": "db59e8d3-8ade-4600-88ec-8cee0c1fc26b",
+                "embeds": [],
+                "isassociatedwith": [
+                    "3719fbab-7251-4ba6-b048-86f8fb3ee117",
+                    "8964d63a-e7de-475f-99e6-0cf2e67270ac"
+                ]
+            },
+            "6eee755a-2f5d-46fa-b94f-61e1fa865cf8": {
+                "size": {
+                    "width": 1250,
+                    "height": 390
+                },
+                "position": {
+                    "x": -240,
+                    "y": 170
+                },
+                "z": 0,
+                "embeds": [
+                    "d08596d3-fe82-4885-a2a2-324dc42c79eb",
+                    "db59e8d3-8ade-4600-88ec-8cee0c1fc26b",
+                    "3719fbab-7251-4ba6-b048-86f8fb3ee117"
+                ]
+            },
+            "db59e8d3-8ade-4600-88ec-8cee0c1fc26b": {
+                "size": {
+                    "width": 500,
+                    "height": 290
+                },
+                "position": {
+                    "x": 260,
+                    "y": 230
+                },
+                "z": 1,
+                "parent": "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                "embeds": [
+                    "d7518118-0627-4c10-98f7-6ce50ff0dd2c",
+                    "01c8ec68-140f-4963-a73b-a1dff7167e7e",
+                    "6f2b12a7-1cc6-441f-b771-e8999b3432f7",
+                    "2afd2806-aa6b-4cd6-9143-2cc3d0189536",
+                    "d60d3065-5f89-4e0c-9c17-59ae6d7a5c6c",
+                    "f288da4a-e50e-484c-8edc-b82ae31cc2c7"
+                ],
+                "iscontainedinside": [
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8"
+                ]
+            },
+            "d08596d3-fe82-4885-a2a2-324dc42c79eb": {
+                "size": {
+                    "width": 350,
+                    "height": 260
+                },
+                "position": {
+                    "x": -150,
+                    "y": 270
+                },
+                "z": 1,
+                "parent": "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                "embeds": [
+                    "beefb4bd-5d52-4306-91f1-51e6c3c33d0d",
+                    "9b12bc31-6a4d-4cf0-8e96-493a4c5a7984",
+                    "36722a4a-5f24-47a5-bdb1-151360020f58"
+                ],
+                "iscontainedinside": [
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8",
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8"
+                ]
+            },
+            "80bf68c2-080f-43b7-9767-2af953a764fc": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": -317.8846785161028,
+                    "y": 271.264021686139
+                },
+                "z": 0,
+                "embeds": []
+            },
+            "d400fa30-5c6d-40f7-8059-17ac0b41a881": {
+                "source": {
+                    "id": "6eee755a-2f5d-46fa-b94f-61e1fa865cf8"
+                },
+                "target": {
+                    "id": "80bf68c2-080f-43b7-9767-2af953a764fc"
+                },
+                "z": 0
+            },
+            "beefb4bd-5d52-4306-91f1-51e6c3c33d0d": {
+                "size": {
+                    "width": 160,
+                    "height": 110
+                },
+                "position": {
+                    "x": -80,
+                    "y": 300
+                },
+                "z": 2,
+                "parent": "d08596d3-fe82-4885-a2a2-324dc42c79eb",
+                "embeds": [
+                    "b7748c9c-c832-4532-b146-3831675affdb"
+                ],
+                "iscontainedinside": [
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8"
+                ]
+            },
+            "b7748c9c-c832-4532-b146-3831675affdb": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": -50,
+                    "y": 330
+                },
+                "z": 3,
+                "parent": "beefb4bd-5d52-4306-91f1-51e6c3c33d0d",
+                "embeds": [],
+                "isassociatedwith": [
+                    "80bf68c2-080f-43b7-9767-2af953a764fc"
+                ],
+                "iscontainedinside": [
+                    "beefb4bd-5d52-4306-91f1-51e6c3c33d0d",
+                    "beefb4bd-5d52-4306-91f1-51e6c3c33d0d",
+                    "beefb4bd-5d52-4306-91f1-51e6c3c33d0d",
+                    "beefb4bd-5d52-4306-91f1-51e6c3c33d0d",
+                    "beefb4bd-5d52-4306-91f1-51e6c3c33d0d",
+                    "beefb4bd-5d52-4306-91f1-51e6c3c33d0d",
+                    "beefb4bd-5d52-4306-91f1-51e6c3c33d0d",
+                    "beefb4bd-5d52-4306-91f1-51e6c3c33d0d",
+                    "beefb4bd-5d52-4306-91f1-51e6c3c33d0d"
+                ],
+                "dependson": [
+                    "d400fa30-5c6d-40f7-8059-17ac0b41a881"
+                ]
+            },
+            "e1a7a817-3a4a-4471-8558-204114186d9f": {
+                "source": {
+                    "id": "beefb4bd-5d52-4306-91f1-51e6c3c33d0d"
+                },
+                "target": {
+                    "id": "d08596d3-fe82-4885-a2a2-324dc42c79eb"
+                },
+                "z": 2
+            },
+            "d7518118-0627-4c10-98f7-6ce50ff0dd2c": {
+                "size": {
+                    "width": 210,
+                    "height": 140
+                },
+                "position": {
+                    "x": 340,
+                    "y": 360
+                },
+                "z": 2,
+                "parent": "db59e8d3-8ade-4600-88ec-8cee0c1fc26b",
+                "embeds": [
+                    "c8c6a8be-5bc9-464b-ae0d-cbecc2c6b08e"
+                ],
+                "iscontainedinside": [
+                    "6eee755a-2f5d-46fa-b94f-61e1fa865cf8"
+                ]
+            },
+            "36722a4a-5f24-47a5-bdb1-151360020f58": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 110,
+                    "y": 410
+                },
+                "z": 2,
+                "parent": "d08596d3-fe82-4885-a2a2-324dc42c79eb",
+                "embeds": [],
+                "iscontainedinside": [
+                    "d08596d3-fe82-4885-a2a2-324dc42c79eb",
+                    "d08596d3-fe82-4885-a2a2-324dc42c79eb",
+                    "d08596d3-fe82-4885-a2a2-324dc42c79eb",
+                    "d08596d3-fe82-4885-a2a2-324dc42c79eb",
+                    "d08596d3-fe82-4885-a2a2-324dc42c79eb",
+                    "d08596d3-fe82-4885-a2a2-324dc42c79eb",
+                    "d08596d3-fe82-4885-a2a2-324dc42c79eb"
+                ]
+            },
+            "9b12bc31-6a4d-4cf0-8e96-493a4c5a7984": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 110,
+                    "y": 310
+                },
+                "z": 2,
+                "parent": "d08596d3-fe82-4885-a2a2-324dc42c79eb",
+                "embeds": [],
+                "dependson": [
+                    "d400fa30-5c6d-40f7-8059-17ac0b41a881"
+                ]
+            },
+            "c8c6a8be-5bc9-464b-ae0d-cbecc2c6b08e": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 370,
+                    "y": 410
+                },
+                "z": 3,
+                "parent": "d7518118-0627-4c10-98f7-6ce50ff0dd2c",
+                "embeds": [],
+                "iscontainedinside": [
+                    "d7518118-0627-4c10-98f7-6ce50ff0dd2c",
+                    "d7518118-0627-4c10-98f7-6ce50ff0dd2c",
+                    "d7518118-0627-4c10-98f7-6ce50ff0dd2c"
+                ]
+            },
+            "5763f5bb-cb13-4e4f-a5b7-4abbba59b952": {
+                "source": {
+                    "id": "d7518118-0627-4c10-98f7-6ce50ff0dd2c"
+                },
+                "target": {
+                    "id": "db59e8d3-8ade-4600-88ec-8cee0c1fc26b"
+                },
+                "z": 2
+            }
+        }
+    },
+    "Parameters": {
+        "ServiceName": {
+            "Type": "String",
+            "Default": "FileProcessor",
+            "Description": "ECS for fileprocessor"
+        },
+        "CloudWatchRule": {
+            "Type": "String",
+            "Default": "NONE",
+            "Description": " Schedule Expression"
+        },
+        "env": {
+            "Type": "String"
+        },
+        "storageProceptRobotDataBucketName": {
+            "Type": "String",
+            "Default": "storageProceptRobotDataBucketName"
+        },
+        "apiproceptgqlGraphQLAPIIdOutput": {
+            "Type": "String",
+            "Default": "apiproceptgqlGraphQLAPIIdOutput"
+        },
+        "Image": {
+            "Type": "String",
+            "Default": "427832089164.dkr.ecr.us-west-2.amazonaws.com/procept/echo-helloworld"
+        },
+        "ContainerPort": {
+            "Type": "Number",
+            "Default": 80
+        }
+    },
+    "Conditions": {
+        "ShouldNotCreateEnvResources": {
+            "Fn::Equals": [
+                {
+                    "Ref": "env"
+                },
+                "NONE"
+            ]
+        }
+    },
+    "Mappings": {
+        "SubnetConfig": {
+            "VPC": {
+                "CIDR": "10.0.0.0/16"
+            },
+            "SubnetPublic": {
+                "CIDR": "10.0.1.0/24"
+            },
+            "SubnetPrivate": {
+                "CIDR": "10.0.2.0/24"
+            }
+        }
+    },
+    "Resources": {
+        "Cluster": {
+            "Type": "AWS::ECS::Cluster",
+            "Properties": {
+                "ClusterName": {
+                    "Fn::If": [
+                        "ShouldNotCreateEnvResources",
+                        {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    {
+                                        "Ref": "ServiceName"
+                                    },
+                                    "Cluster"
+                                ]
+                            ]
+                        },
+                        {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    {
+                                        "Ref": "ServiceName"
+                                    },
+                                    "Cluster",
+                                    "-",
+                                    {
+                                        "Ref": "env"
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "3719fbab-7251-4ba6-b048-86f8fb3ee117"
+                }
+            }
+        },
+        "LogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+                "LogGroupName": {
+                    "Fn::If": [
+                        "ShouldNotCreateEnvResources",
+                        {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    "/ecs/",
+                                    {
+                                        "Ref": "ServiceName"
+                                    },
+                                    "TaskDefinition"
+                                ]
+                            ]
+                        },
+                        {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    "/ecs/",
+                                    {
+                                        "Ref": "ServiceName"
+                                    },
+                                    "TaskDefinition",
+                                    "-",
+                                    {
+                                        "Ref": "env"
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "d60d3065-5f89-4e0c-9c17-59ae6d7a5c6c"
+                }
+            }
+        },
+        "TaskDefinition": {
+            "Type": "AWS::ECS::TaskDefinition",
+            "Properties": {
+                "Family": {
+                    "Fn::If": [
+                        "ShouldNotCreateEnvResources",
+                        {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    {
+                                        "Ref": "ServiceName"
+                                    },
+                                    "TaskDefinition"
+                                ]
+                            ]
+                        },
+                        {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    {
+                                        "Ref": "ServiceName"
+                                    },
+                                    "TaskDefinition",
+                                    "-",
+                                    {
+                                        "Ref": "env"
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                },
+                "NetworkMode": "awsvpc",
+                "RequiresCompatibilities": [
+                    "FARGATE"
+                ],
+                "Cpu": "1024",
+                "Memory": "8192",
+                "ExecutionRoleArn": {
+                    "Ref": "ExecutionRole"
+                },
+                "TaskRoleArn": {
+                    "Ref": "TaskRole"
+                },
+                "ContainerDefinitions": [
+                    {
+                        "Name": {
+                            "Fn::If": [
+                                "ShouldNotCreateEnvResources",
+                                {
+                                    "Ref": "ServiceName"
+                                },
+                                {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            {
+                                                "Ref": "ServiceName"
+                                            },
+                                            "-",
+                                            {
+                                                "Ref": "env"
+                                            }
+                                        ]
+                                    ]
+                                }
+                            ]
+                        },
+                        "Image": {
+                            "Ref": "Image"
+                        },
+                        "PortMappings": [
+                            {
+                                "ContainerPort": {
+                                    "Ref": "ContainerPort"
+                                }
+                            }
+                        ],
+                        "LogConfiguration": {
+                            "LogDriver": "awslogs",
+                            "Options": {
+                                "awslogs-region": {
+                                    "Ref": "AWS::Region"
+                                },
+                                "awslogs-group": {
+                                    "Ref": "LogGroup"
+                                },
+                                "awslogs-stream-prefix": "ecs"
+                            }
+                        },
+                        "EntryPoint" : ["/root/fp/entrypoint.sh"],
+                        "Environment": [
+                            {
+                                "Name": "DEFAULT_AWS_REGION",
+                                "Value": "us-west-2"
+                            },
+                            {
+                                "Name": "AWSRES_DB",
+                                "Value": "sqlite://"
+                            },
+                            {
+                                "Name": "AWSRES_S3_ROBOT",
+                                "Value": ""
+                            },
+                            {
+                                "Name": "AWSRES_S3_STORAGE",
+                                "Value": ""
+                            },
+                            {
+                                "Name": "AWSRES_S3_STORAGE_BUCKET",
+                                "Value": "procept.fp.storage"
+                            },
+                            {
+                                "Name": "AWSRES_S3_STORAGE_ROOT",
+                                "Value": "public/fp/"
+                            },
+                            {
+                                "Name": "AWSRES_SQS",
+                                "Value": ""
+                            },
+                            {
+                                "Name": "AWSRES_STATE",
+                                "Value": ""
+                            },
+                            {
+                                "Name": "FP_BRANCH",
+                                "Value": "master"
+                            },
+                            {
+                                "Name": "FP_NAME",
+                                "Value": "FileProcessor"
+                            },
+                            {
+                                "Name": "ECS_ENABLE_CONTAINER_METADATA",
+                                "Value": "true"
+                            },
+                            {
+                                "Name": "AWSRES_DYNAMODB_REPORT",
+                                "Value": ""
+                            },
+                            {
+                                "Name": "AWSRES_DYNAMODB_ROBOT",
+                                "Value": ""
+                            },
+                            {
+                                "Name": "AWSRES_DYNAMODB_SESSION",
+                                "Value": ""
+                            },
+                            {
+                                "Name": "AWSRES_DYNAMODB_CPU_ERROR",
+                                "Value": ""
+                            },
+                            {
+                                "Name": "AWSRES_DYNAMODB_HANDPIECE",
+                                "Value": ""
+                            },
+                            {
+                                "Name": "AWSRES_DYNAMODB_APPLOG",
+                                "Value": "" 
+                            },
+                            {
+                                "Name": "AWSRES_DYNAMODB_LABEL_IMAGE",
+                                "Value": ""
+                            },
+                            {
+                                "Name": "AWSRES_DYNAMODB_LABEL_DATASET",
+                                "Value": ""
+                            },
+                            {
+                                "Name": "AWSRES_DYNAMODB_AI_MODEL",
+                                "Value": ""
+                            },
+                            {
+                                "Name": "AWSRES_DYNAMODB_AI_ANNOTATION",
+                                "Value": ""
+                            },
+                            {
+                                "Name": "AWSRES_DYNAMODB_LABEL_DATA_ROW",
+                                "Value": ""
+                            }
+                        ]
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "8964d63a-e7de-475f-99e6-0cf2e67270ac"
+                }
+            },
+            "DependsOn": [
+                "LogGroup"
+            ]
+        },
+        "TaskRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "RoleName": {
+                    "Fn::If": [
+                        "ShouldNotCreateEnvResources",
+                        {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    {
+                                        "Ref": "ServiceName"
+                                    },
+                                    "TaskRole"
+                                ]
+                            ]
+                        },
+                        {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    {
+                                        "Ref": "ServiceName"
+                                    },
+                                    "TaskRole",
+                                    "-",
+                                    {
+                                        "Ref": "env"
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                },
+                "AssumeRolePolicyDocument": {
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "ecs-tasks.amazonaws.com"
+                                ]
+                            },
+                            "Action": "sts:AssumeRole"
+                        }
+                    ]
+                },
+                "Policies": [
+                    {
+                        "PolicyName": "S3AccessPolicy",
+                        "PolicyDocument" : {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "s3:PutObject",
+                                        "s3:GetObject",
+                                        "s3:ListBucket",
+                                        "s3:DeleteObject"
+                                    ],
+                                    "Resource": "arn:aws:s3:::*"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "PolicyName": "SQSAccessPolicy",
+                        "PolicyDocument" : {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "sqs:*"
+                                    ],
+                                    "Resource": "*"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "PolicyName": "DynamoDBAccessPolicy",
+                        "PolicyDocument" : {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                            {
+                                "Effect": "Allow",
+                                "Action": [
+                                    "dynamodb:Put*",
+                                    "dynamodb:Create*",
+                                    "dynamodb:BatchWriteItem",
+                                    "dynamodb:Get*",
+                                    "dynamodb:BatchGetItem",
+                                    "dynamodb:List*",
+                                    "dynamodb:Describe*",
+                                    "dynamodb:Scan",
+                                    "dynamodb:Query",
+                                    "dynamodb:Update*",
+                                    "dynamodb:RestoreTable*",
+                                    "dynamodb:Delete*"
+                                ],
+                                "Resource": [
+                                    {
+                                        "Fn::Join": [
+                                            "",
+                                            [
+                                                "arn:aws:dynamodb:",
+                                                {
+                                                    "Ref": "AWS::Region"
+                                                },
+                                                ":",
+                                                {
+                                                    "Ref": "AWS::AccountId"
+                                                },
+                                                ":table/*"
+                                            ]
+                                        ]
+                                    }                                                                                              
+                                ]
+                            }]
+                        }
+                    },
+                    {
+                        "PolicyName": "LambdaFunctionAccessPolicy",
+                        "PolicyDocument" : {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                            {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "lambda:Get*",
+                                  "lambda:List*",
+                                  "lambda:Invoke*"
+                                ],
+                                "Resource": [
+                                    {
+                                        "Fn::Join": [
+                                            "",
+                                            [
+                                                "arn:aws:lambda:",
+                                                {
+                                                    "Ref": "AWS::Region"
+                                                },
+                                                ":",
+                                                {
+                                                    "Ref": "AWS::AccountId"
+                                                },
+                                                ":function:*"
+                                            ]
+                                        ]
+                                    }
+                                ]
+                            }]
+                        }
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "2afd2806-aa6b-4cd6-9143-2cc3d0189536"
+                }
+            }
+        },
+        "ExecutionRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "RoleName": {
+                    "Fn::If": [
+                        "ShouldNotCreateEnvResources",
+                        {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    {
+                                        "Ref": "ServiceName"
+                                    },
+                                    "ExecutionRole"
+                                ]
+                            ]
+                        },
+                        {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    {
+                                        "Ref": "ServiceName"
+                                    },
+                                    "ExecutionRole",
+                                    "-",
+                                    {
+                                        "Ref": "env"
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                },
+                "AssumeRolePolicyDocument": {
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "ecs-tasks.amazonaws.com"
+                                ]
+                            },
+                            "Action": "sts:AssumeRole"
+                        }
+                    ]
+                },
+                "ManagedPolicyArns": [
+                    "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "6f2b12a7-1cc6-441f-b771-e8999b3432f7"
+                }
+            }
+        },
+        "VPC": {
+            "Type": "AWS::EC2::VPC",
+            "Properties": {
+                "CidrBlock": {
+                    "Fn::FindInMap": [
+                        "SubnetConfig",
+                        "VPC",
+                        "CIDR"
+                    ]
+                },
+                "EnableDnsHostnames": "true",
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::If": [
+                                "ShouldNotCreateEnvResources",
+                                {
+                                    "Fn::Join": [
+                                        "-",
+                                        [
+                                            {
+                                                "Ref": "ServiceName"
+                                            },
+                                            "VPC"
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "Fn::Join": [
+                                        "-",
+                                        [
+                                            {
+                                                "Ref": "ServiceName"
+                                            },
+                                            "VPC",
+                                            {
+                                                "Ref": "env"
+                                            }
+                                        ]
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "6eee755a-2f5d-46fa-b94f-61e1fa865cf8"
+                }
+            }
+        },
+        "SubnetPrivate": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "AvailabilityZone": {
+                    "Fn::Select": [
+                        "0",
+                        {
+                            "Fn::GetAZs": {
+                                "Ref": "AWS::Region"
+                            }
+                        }
+                    ]
+                },
+                "CidrBlock": {
+                    "Fn::FindInMap": [
+                        "SubnetConfig",
+                        "SubnetPrivate",
+                        "CIDR"
+                    ]
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::If": [
+                                "ShouldNotCreateEnvResources",
+                                {
+                                    "Fn::Join": [
+                                        "-",
+                                        [
+                                            {
+                                                "Ref": "ServiceName"
+                                            },
+                                            "PrivateSubnet"
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "Fn::Join": [
+                                        "-",
+                                        [
+                                            {
+                                                "Ref": "ServiceName"
+                                            },
+                                            "PrivateSubnet",
+                                            {
+                                                "Ref": "env"
+                                            }
+                                        ]
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "db59e8d3-8ade-4600-88ec-8cee0c1fc26b"
+                }
+            }
+        },
+        "SubnetPublic": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "AvailabilityZone": {
+                    "Fn::Select": [
+                        "0",
+                        {
+                            "Fn::GetAZs": {
+                                "Ref": "AWS::Region"
+                            }
+                        }
+                    ]
+                },
+                "CidrBlock": {
+                    "Fn::FindInMap": [
+                        "SubnetConfig",
+                        "SubnetPublic",
+                        "CIDR"
+                    ]
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::If": [
+                                "ShouldNotCreateEnvResources",
+                                {
+                                    "Fn::Join": [
+                                        "-",
+                                        [
+                                            {
+                                                "Ref": "ServiceName"
+                                            },
+                                            "PublicSubnet"
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "Fn::Join": [
+                                        "-",
+                                        [
+                                            {
+                                                "Ref": "ServiceName"
+                                            },
+                                            "PublicSubnet",
+                                            {
+                                                "Ref": "env"
+                                            }
+                                        ]
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "d08596d3-fe82-4885-a2a2-324dc42c79eb"
+                }
+            }
+        },
+        "InternetGateway": {
+            "Type": "AWS::EC2::InternetGateway",
+            "Properties": {
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    {
+                                        "Ref": "ServiceName"
+                                    },
+                                    "-",
+                                    "InternetGateway"
+                                ]
+                            ]
+                        }
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "80bf68c2-080f-43b7-9767-2af953a764fc"
+                }
+            }
+        },
+        "GatewayAttachment": {
+            "Type": "AWS::EC2::VPCGatewayAttachment",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "InternetGatewayId": {
+                    "Ref": "InternetGateway"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "d400fa30-5c6d-40f7-8059-17ac0b41a881"
+                }
+            }
+        },
+        "PublicRouteTable": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    {
+                                        "Ref": "ServiceName"
+                                    },
+                                    "-",
+                                    "PublicRouteTable"
+                                ]
+                            ]
+                        }
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "beefb4bd-5d52-4306-91f1-51e6c3c33d0d"
+                }
+            }
+        },
+        "PublicRoute": {
+            "Type": "AWS::EC2::Route",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "PublicRouteTable"
+                },
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "GatewayId": {
+                    "Ref": "InternetGateway"
+                }
+            },
+            "DependsOn": [
+                "GatewayAttachment"
+            ],
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "b7748c9c-c832-4532-b146-3831675affdb"
+                }
+            }
+        },
+        "PublicSubnetRouteTableAssociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "SubnetId": {
+                    "Ref": "SubnetPublic"
+                },
+                "RouteTableId": {
+                    "Ref": "PublicRouteTable"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "e1a7a817-3a4a-4471-8558-204114186d9f"
+                }
+            }
+        },
+        "PrivateRouteTable": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    {
+                                        "Ref": "ServiceName"
+                                    },
+                                    "-",
+                                    "PrivateRouteTable"
+                                ]
+                            ]
+                        }
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "d7518118-0627-4c10-98f7-6ce50ff0dd2c"
+                }
+            }
+        },
+        "NatGateway": {
+            "Type": "AWS::EC2::NatGateway",
+            "Properties": {
+                "SubnetId": {
+                    "Ref": "SubnetPublic"
+                },
+                "AllocationId": {
+                    "Fn::GetAtt": [
+                        "NatGatewayAttachment",
+                        "AllocationId"
+                    ]
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "36722a4a-5f24-47a5-bdb1-151360020f58"
+                }
+            }
+        },
+        "NatGatewayAttachment": {
+            "Type": "AWS::EC2::EIP",
+            "Properties": {
+                "Domain": "vpc"
+            },
+            "DependsOn": [
+                "GatewayAttachment"
+            ],
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "9b12bc31-6a4d-4cf0-8e96-493a4c5a7984"
+                }
+            }
+        },
+        "PrivateRoute": {
+            "Type": "AWS::EC2::Route",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "PrivateRouteTable"
+                },
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "NatGatewayId": {
+                    "Ref": "NatGateway"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "c8c6a8be-5bc9-464b-ae0d-cbecc2c6b08e"
+                }
+            }
+        },
+        "PrivateRouteTableAssociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "PrivateRouteTable"
+                },
+                "SubnetId": {
+                    "Ref": "SubnetPrivate"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "5763f5bb-cb13-4e4f-a5b7-4abbba59b952"
+                }
+            }
+        }
+    },
+    "Outputs": {
+        "ClusterName": {
+            "Description": "The name of the ECS cluster",
+            "Value": {
+                "Ref": "Cluster"
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Join": [
+                        ":",
+                        [
+                            {
+                                "Ref": "AWS::StackName"
+                            },
+                            "ClusterName"
+                        ]
+                    ]
+                }
+            }
+        },
+        "TaskRole": {
+            "Description": "The ARN of the ECS Task role",
+            "Value": {
+                "Fn::GetAtt": [
+                    "TaskRole", "Arn"]
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Join": [
+                        ":",
+                        [
+                            {
+                                "Ref": "AWS::StackName"
+                            },
+                            "TaskRole"
+                        ]
+                    ]
+                }
+            }
+        },
+        "ExecutionRole": {
+            "Description": "The ARN of the ECS Execution role",
+            "Value": {
+                "Fn::GetAtt": [
+                    "ExecutionRole", "Arn"]
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Join": [
+                        ":",
+                        [
+                            {
+                                "Ref": "AWS::StackName"
+                            },
+                            "ExecutionRole"
+                        ]
+                    ]
+                }
+            }
+        },
+        "VPCId": {
+            "Description": "The ID of the VPC that this stack is deployed in",
+            "Value":  {
+                "Ref": "VPC"
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Join": [
+                        ":",
+                        [
+                            {
+                                "Ref": "AWS::StackName"
+                            },
+                            "VPCId"
+                       ]
+                    ]
+                }
+            }
+        },
+        "PublicSubnet": {
+            "Description": "Public subnet",
+            "Value":  {
+                "Ref": "SubnetPublic"
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Join": [
+                        ":",
+                        [
+                            {
+                                "Ref": "AWS::StackName"
+                            },
+                            "PublicSubnet"
+                       ]
+                    ]
+                }
+            }
+        },
+        "PrivateSubnet": {
+            "Description": "Private subnet",
+            "Value":  {
+                "Ref": "SubnetPrivate"
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Join": [
+                        ":",
+                        [
+                            {
+                                "Ref": "AWS::StackName"
+                            },
+                            "PrivateSubnet"
+                       ]
+                    ]
+                }
+            }
+        }
+    }
+}

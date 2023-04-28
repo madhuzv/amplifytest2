@@ -1,0 +1,5 @@
+{
+    "tableName": "[***]BackDB",
+    "partitionKeyName": "[***]il",
+    "partitionKeyType": "[***]S"
+}

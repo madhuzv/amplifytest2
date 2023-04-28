@@ -1,0 +1,33 @@
+{
+  "CloudWatchRule": "NONE",
+  "ecsfileProcessorPrivateSubnet": {
+    "Fn::GetAtt": [
+      "ecsfileProcessor",
+      "Outputs.PrivateSubnet"
+    ]
+  },
+  "snsfileDispatcherSessionDataTopic": {
+    "Fn::GetAtt": [
+      "snsfileDispatcher",
+      "Outputs.SessionDataTopic"
+    ]
+  },
+  "snsfileDispatcherAppLogTopic": {
+    "Fn::GetAtt": [
+      "snsfileDispatcher",
+      "Outputs.AppLogTopic"
+    ]
+  },
+  "snsfileDispatcherPortalUploadDataTopic": {
+    "Fn::GetAtt": [
+      "snsfileDispatcher",
+      "Outputs.PortalUploadDataTopic"
+    ]
+  },
+  "snsfileDispatcherAIPredictionTopic": {
+    "Fn::GetAtt": [
+      "snsfileDispatcher",
+      "Outputs.AIPredictionTopic"
+    ]
+  }
+}

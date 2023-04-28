@@ -1,0 +1,8 @@
+{
+    "snsfileDispatcherAIPredictionTopic": {
+        "Fn::GetAtt": [
+          "snsfileDispatcher",
+          "Outputs.AIPredictionTopic"
+        ]
+    }
+}
